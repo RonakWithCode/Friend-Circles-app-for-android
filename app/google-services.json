@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "27692683761",
+    "project_id": "friend-circle-f948a",
+    "storage_bucket": "friend-circle-f948a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27692683761:android:b3c82c8128bf81043db450",
+        "android_client_info": {
+          "package_name": "com.crazyostudio.friendcircle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27692683761-jqmsdurn8upbiaf6j1emde6a40d1l791.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCItXCDsACvvQAHjuj61yxulrSzCdY7sAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "27692683761-jqmsdurn8upbiaf6j1emde6a40d1l791.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

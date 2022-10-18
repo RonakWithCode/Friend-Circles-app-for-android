@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">friend circle</string>
+    <string name="crazy_studio">Crazy Studio</string>
+    <string name="HaveAccount">Already have an Account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="have_an_account">I have an account?</string>
+    <string name="login">Login</string>
+    <string name="log_in">Log in</string>
+    <string name="log_out">Log out</string>
+    <string name="sign_up">Sign up</string>
+    <string name="item_name">Item Name</string>
+    <string name="try_again">TRY AGAIN</string>
+
+    <string name="wait">Wait</string>
+    <string name="ok">OK</string>
+    <string name="name">Name</string>
+    <string name="mail">Mail</string>
+    <string name="password">Password</string>
+    <string name="number">Number</string>
+    <string name="upload">Upload</string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
+    <string name="bio">bio</string>
+    <string name="tell_me_about_your_self">Tell me about your self</string>
+    <string name="profile">Profile</string>
+    <string name="PhoneNumber">Phone Number</string>
+    <string name="if_your_change_amy_things_in_profile_your_can_tap_on_profile">If your change amy things in profile your can tap on profile</string>
+    <string name="Theme">Theme</string>
+    <string name="changes">Change</string>
+</resources>
