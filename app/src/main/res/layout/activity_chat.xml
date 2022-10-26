@@ -6,96 +6,114 @@
     android:layout_width="match_parent"
     android:background="@drawable/bglayout"
     android:layout_height="match_parent"
-    tools:context=".chat">
+    tools:context=".Chats.chat">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/green"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:background="@drawable/bglayout"
-    android:layout_height="match_parent"
-    android:id="@+id/Background">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/green"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintStart_toStartOf="@+id/Background"
-        app:layout_constraintTop_toTopOf="@+id/Background">
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/BackBts"
-            android:layout_width="20dp"
-            android:layout_height="32dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/img"
-            app:riv_oval="true" />
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/BackBts"
+                android:layout_width="20dp"
+                android:layout_height="32dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/img"
+                app:riv_oval="true" />
 
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/userImage"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="30dp"
-            app:riv_corner_radius="30dp"
-            app:riv_border_width="1dp"
-            app:riv_border_color="#4A4A4A"
-            android:scaleType="fitXY"
-            android:src="@drawable/userimage"
-            app:riv_oval="true" />
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/userImage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="30dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/userimage"
+                app:riv_border_color="#4A4A4A"
+                app:riv_border_width="1dp"
+                app:riv_corner_radius="30dp"
+                app:riv_oval="true" />
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="23dp"
-            android:layout_marginTop="6dp"
-            android:maxLength="24"
-            android:text="Ronak jain"
-            android:textColor="@color/white"
-            android:textSize="19sp"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="6dp"
+                android:maxLength="24"
+                android:text="Ronak jain"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="42dp"
-        app:layout_constraintBottom_toTopOf="@+id/InputText"
-        app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintStart_toStartOf="@+id/Background"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        android:layout_height="571dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/Sander"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/InputText"
-        android:layout_width="270dp"
-        android:paddingStart="30dp"
-        android:paddingEnd="20dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Sander"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:minHeight="50dp"
-        android:textStyle="normal"
-        android:textColorLink="@color/Link"
-        android:maxHeight="90dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/edittextbg"
-        android:inputType="textMultiLine"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/Background"
-        app:layout_constraintStart_toStartOf="@+id/Background" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/SandBts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Background"
-        app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintHorizontal_bias="0.889"
-        app:layout_constraintStart_toEndOf="@+id/InputText"
-        app:srcCompat="@android:drawable/ic_media_next" />
+
+        <EditText
+            android:id="@+id/InputText"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/edittextbg"
+            android:inputType="textMultiLine"
+            android:maxHeight="90dp"
+            android:minHeight="50dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="2dp"
+            android:text="@string/profile"
+            android:textColor="@color/black"
+            android:textColorLink="@color/Link"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageBts"
+            android:layout_width="32dp"
+            android:layout_height="37dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/InputText"
+            app:layout_constraintStart_toStartOf="@+id/InputText"
+            app:layout_constraintTop_toTopOf="@+id/InputText"
+            app:layout_constraintVertical_bias="0.461"
+            app:srcCompat="@drawable/ic_photo_camera_black_48dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/SandBts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toEndOf="@+id/InputText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@android:drawable/ic_media_next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

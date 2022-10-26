@@ -2,21 +2,28 @@ package com.crazyostudio.friendcircle.model;
 
 public class Chat_Model {
     private String ID,Message;
-    long time;
+    private boolean IsImage;
 
-    public Chat_Model(String ID, String message, long time) {
-        this.ID = ID;
-        Message = message;
-        this.time = time;
-    }
+
     public Chat_Model(){}
     public Chat_Model(String ID, String message) {
         this.ID = ID;
         Message = message;
     }
-    public Chat_Model(String message, long time) {
+
+
+    public boolean isImage() {
+        return IsImage;
+    }
+
+    public Chat_Model(String ID, String message, boolean isImage) {
+        this.ID = ID;
         Message = message;
-        this.time = time;
+        IsImage = isImage;
+    }
+
+    public void setImage(boolean image) {
+        IsImage = image;
     }
 
     public String getID() {
@@ -35,11 +42,4 @@ public class Chat_Model {
         Message = message;
     }
 
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
 }

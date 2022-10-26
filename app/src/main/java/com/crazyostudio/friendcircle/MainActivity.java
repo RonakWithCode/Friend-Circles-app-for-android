@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,11 +88,18 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.Profile) {
             startActivity(new Intent(MainActivity.this, User_Profile.class));
 
-        } else if (item.getItemId() == R.id.logout) {
+        }
+        else if (item.getItemId() == R.id.group_chats) {
+            Toast.makeText(this, "Coming soon   ", Toast.LENGTH_SHORT).show();
+//            startActivity(new Intent(MainActivity.this, Create_Group_Chat.class));
+        }
+        else if (item.getItemId() == R.id.logout) {
             auth.signOut();
+
             startActivity(new Intent(MainActivity.this, Login.class));
             finish();
         }
+
         return super.onOptionsItemSelected(item);
     }
 }

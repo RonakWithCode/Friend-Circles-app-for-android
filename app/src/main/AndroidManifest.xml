@@ -20,7 +20,7 @@
             android:name=".user.User_Profile"
             android:exported="false" />
         <activity
-            android:name=".chat"
+            android:name=".Chats.chat"
             android:exported="false" />
         <activity
             android:name=".user.Login"

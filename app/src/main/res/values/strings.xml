@@ -28,4 +28,7 @@
     <string name="if_your_change_amy_things_in_profile_your_can_tap_on_profile">If your change amy things in profile your can tap on profile</string>
     <string name="Theme">Theme</string>
     <string name="changes">Change</string>
+    <string name="group_chat">Group chat</string>
+    <string name="todo">TODO</string>
+    <string name="user">User</string>
 </resources>

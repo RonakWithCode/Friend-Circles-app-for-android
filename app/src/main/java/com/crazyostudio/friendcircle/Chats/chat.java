@@ -1,10 +1,15 @@
-package com.crazyostudio.friendcircle;
+package com.crazyostudio.friendcircle.Chats;
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -13,23 +18,27 @@ import com.crazyostudio.friendcircle.adapters.ChatAdapters;
 import com.crazyostudio.friendcircle.databinding.ActivityChatBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
 import com.crazyostudio.friendcircle.user.SeeUserProfile;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 public class chat extends AppCompatActivity {
-
+    private StorageReference reference;
     ActivityChatBinding binding;
     String UserName,UserImage,UserId,SandId,UserBio;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth auth;
-
+    ChatAdapters chatAdapters;
+    String sanderRoom,recRoom;
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +46,7 @@ public class chat extends AppCompatActivity {
         setContentView(binding.getRoot());
         firebaseDatabase = FirebaseDatabase.getInstance();
         Objects.requireNonNull(getSupportActionBar()).hide();
+        reference = FirebaseStorage.getInstance().getReference("ChatImage");
         auth = FirebaseAuth.getInstance();
         UserName = getIntent().getStringExtra("name");
         UserImage = getIntent().getStringExtra("Images");
@@ -56,17 +66,18 @@ public class chat extends AppCompatActivity {
         binding.username.setText(UserName);
         Glide.with(this).load(UserImage).into(binding.userImage);
         binding.BackBts.setOnClickListener(view -> finish());
-        final ArrayList<Chat_Model> ChatModels = new ArrayList<>();
-        final ChatAdapters chatAdapters = new ChatAdapters(ChatModels,this);
+        ArrayList<Chat_Model> ChatModels = new ArrayList<>();
+        chatAdapters = new ChatAdapters(ChatModels,this);
         binding.recyclerView2.setAdapter(chatAdapters);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView2.setLayoutManager(layoutManager);
 
-        final String sanderRoom = SandId + UserId;
-        final String recRoom = UserId + SandId;
+        sanderRoom = SandId + UserId;
+        recRoom = UserId + SandId;
 
         firebaseDatabase.getReference().child("chats").child(sanderRoom).addValueEventListener(new ValueEventListener() {
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -86,12 +97,19 @@ public class chat extends AppCompatActivity {
             }
         });
 
+        binding.imageBts.setOnClickListener(view ->
+                ImagePicker.with(this)
+                        .crop()
+                        .compress(1024)
+                        .maxResultSize(800, 800)
+                        .start(1));
+
+
 
         binding.SandBts.setOnClickListener(view -> {
             if (!binding.InputText.getText().toString().isEmpty()) {
                 final Chat_Model Chat =  new Chat_Model(SandId,binding.InputText.getText().toString());
                 binding.InputText.setText("");
-                Chat.setTime(new Date().getTime());
                 firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
             }
             else {
@@ -99,4 +117,39 @@ public class chat extends AppCompatActivity {
             }
         });
     }
-}
+    private String getfilleExtension(Uri Uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(Uri));
+    }
+
+
+
+
+
+
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
+        if (data.getData() != null && requestCode==1) {
+            final Uri dataUri = data.getData();
+//            binding.userImage.setImageURI(dataUri);
+            StorageReference file = reference.child(System.currentTimeMillis()+"."+getfilleExtension(dataUri));
+            Toast.makeText(this, "Image Sand ", Toast.LENGTH_SHORT).show();
+            file.putFile(dataUri).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri -> {
+                final Chat_Model Chat =  new Chat_Model(SandId,uri.toString(),true);
+                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat)
+                    .addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 ->
+                                    chatAdapters.notifyDataSetChanged()
+                            )
+                    );
+
+            })).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
+
+        }
+    }

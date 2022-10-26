@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.crazyostudio.friendcircle.R;
-import com.crazyostudio.friendcircle.chat;
+import com.crazyostudio.friendcircle.Chats.chat;
 import com.crazyostudio.friendcircle.databinding.MainlookBinding;
 import com.crazyostudio.friendcircle.model.UserInfo;
 
@@ -37,7 +37,7 @@ public class UserInfoAdapters extends RecyclerView.Adapter<UserInfoAdapters.User
         UserInfo product = userInfo.get(position);
         Glide.with(context).load(product.getUserImage()).into(holder.binding.UserImage);
         holder.binding.name.setText(product.getName());
-//        holder.binding.lastMss.setText(product.getBio());
+        holder.binding.bio.setText(product.getBio());
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, chat.class);
             intent.putExtra("name",product.getName());
