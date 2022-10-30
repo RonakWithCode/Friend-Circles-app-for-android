@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.crazyostudio.friendcircle.Chats.GroupChat;
 import com.crazyostudio.friendcircle.adapters.UserInfoAdapters;
 import com.crazyostudio.friendcircle.databinding.ActivityMainBinding;
 import com.crazyostudio.friendcircle.model.UserInfo;
@@ -90,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else if (item.getItemId() == R.id.group_chats) {
-            Toast.makeText(this, "Coming soon   ", Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(MainActivity.this, Create_Group_Chat.class));
+//            Toast.makeText(this, "Coming soon   ", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, GroupChat.class));
         }
         else if (item.getItemId() == R.id.logout) {
             auth.signOut();

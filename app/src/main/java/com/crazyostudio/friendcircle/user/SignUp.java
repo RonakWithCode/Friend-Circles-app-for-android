@@ -45,7 +45,7 @@ public class SignUp extends AppCompatActivity {
         //        binding.userImage.setOnLongClickListener(view -> false);
         binding.userImage.setOnClickListener(view ->
                 ImagePicker.with(this)
-                    .crop()
+                        .crop()
                         .compress(1024)
                         .maxResultSize(1080, 1080)
                         .start(1));
@@ -183,10 +183,10 @@ public class SignUp extends AppCompatActivity {
             userInfo = new UserInfo(binding.Name.getText().toString(),"Using Friend Circle",uri.toString(),binding.Mail.getText().toString(),binding.Password.getText().toString());
             db.getReference().child("UserInfo").child(Objects.requireNonNull(Auth.getUid())).setValue(userInfo);
             if (bar.isShowing()) {
-                 bar.dismiss();
+                bar.dismiss();
                 startActivity(new Intent(SignUp.this, MainActivity.class));
                 finish();
             }
         })).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
-        }
+    }
 }

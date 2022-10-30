@@ -2,21 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="20dp"
-    android:maxWidth="424dp"
-    android:maxHeight="324dp"
-    android:layout_marginEnd="20dp"
+    android:layout_marginTop="10dp"
+    android:maxWidth="260dp"
+    android:minWidth="200dp"
+    android:minHeight="200dp"
+    android:maxHeight="260dp"
+    android:layout_marginStart="5dp"
     android:layout_height="wrap_content">
 
-
-    <ImageView
+    <com.ortiz.touchview.TouchImageView
         android:id="@+id/Imageview"
         android:layout_width="wrap_content"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/todo" />
+        android:layout_marginEnd="1dp"
+        android:contentDescription="@string/todo"
+        android:minWidth="200dp"
+        android:minHeight="200dp"
+        android:background="@color/white"
+        android:paddingStart="3dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="3dp"
+        android:paddingBottom="5dp"
+        android:scaleType="fitXY"
+        tools:src="@tools:sample/avatars" />
 </RelativeLayout>

@@ -13,11 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.crazyostudio.friendcircle.adapters.ChatAdapters;
-import com.crazyostudio.friendcircle.databinding.ActivityChatBinding;
+import com.crazyostudio.friendcircle.databinding.ActivityGroupChatBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
-import com.crazyostudio.friendcircle.user.SeeUserProfile;
+import com.crazyostudio.friendcircle.model.UserInfo;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,63 +29,41 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class chat extends AppCompatActivity {
-    ActivityChatBinding binding;
-    private StorageReference reference;
-    String UserName,UserImage,UserId,SandId,UserBio;
+public class GroupChat extends AppCompatActivity {
+    ActivityGroupChatBinding binding;
+    UserInfo _userInfo;
+    String UserName, UserImage, UserBio;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth auth;
     ChatAdapters chatAdapters;
-    String sanderRoom,recRoom;
-    @SuppressLint("NotifyDataSetChanged")
-
-
+    private StorageReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityChatBinding.inflate(getLayoutInflater());
+        binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         firebaseDatabase = FirebaseDatabase.getInstance();
         Objects.requireNonNull(getSupportActionBar()).hide();
         reference = FirebaseStorage.getInstance().getReference("ChatImage");
         auth = FirebaseAuth.getInstance();
-        UserName = getIntent().getStringExtra("name");
-        UserImage = getIntent().getStringExtra("Images");
-        UserBio = getIntent().getStringExtra("Bio");
-        SandId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-        UserId = getIntent().getStringExtra("UserId");
 
-        binding.toolbar2.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SeeUserProfile.class);
-            intent.putExtra("name",UserName);
-            intent.putExtra("Images",UserImage);
-            intent.putExtra("Bio",UserBio);
-            startActivity(intent);
-        });
-
-
-        binding.username.setText(UserName);
-        Glide.with(this).load(UserImage).into(binding.userImage);
         binding.BackBts.setOnClickListener(view -> finish());
 
         ArrayList<Chat_Model> ChatModels = new ArrayList<>();
-        chatAdapters = new ChatAdapters(ChatModels,this);
+        chatAdapters = new ChatAdapters(ChatModels, this);
         binding.recyclerView2.setAdapter(chatAdapters);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView2.setLayoutManager(layoutManager);
 
-        sanderRoom = SandId + UserId;
-        recRoom = UserId + SandId;
-
-        firebaseDatabase.getReference().child("chats").child(sanderRoom).addValueEventListener(new ValueEventListener() {
+        firebaseDatabase.getReference().child("group").child("public").addValueEventListener(new ValueEventListener() {
 
             @SuppressLint("NotifyDataSetChanged")
             @Override
 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ChatModels.clear();
-                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                     Chat_Model _ChatModel = snapshot1.getValue(Chat_Model.class);
 
@@ -101,59 +78,71 @@ public class chat extends AppCompatActivity {
             }
         });
 
+        firebaseDatabase.getReference("UserInfo").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    if (Objects.equals(snapshot1.getKey(), auth.getUid())) {
+                        _userInfo = snapshot1.getValue(UserInfo.class);
+                        assert _userInfo != null;
+                        UserName = _userInfo.getName();
+                        UserImage = _userInfo.getImageName();
+                        UserBio = _userInfo.getBio();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        binding.SandBts.setOnClickListener(view -> {
+            if (!binding.InputText.getText().toString().isEmpty()) {
+                final Chat_Model Chat = new Chat_Model(auth.getUid(), binding.InputText.getText().toString(), false, UserName, UserBio, UserImage, true);
+                binding.InputText.setText("");
+                firebaseDatabase.getReference().child("group").child("public").push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("re").child("group").push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
+            } else {
+                Toast.makeText(this, "Enter your text", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         binding.imageBts.setOnClickListener(view ->
                 ImagePicker.with(this)
                         .crop()
                         .compress(1024)
                         .maxResultSize(800, 800)
-                        .start(1));
+                        .start(999));
 
 
-
-        binding.SandBts.setOnClickListener(view -> {
-            if (!binding.InputText.getText().toString().isEmpty()) {
-                final Chat_Model Chat =  new Chat_Model(SandId,binding.InputText.getText().toString());
-                binding.InputText.setText("");
-                firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
-            }
-            else {
-                Toast.makeText(this, "Enter your text", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
     private String getfilleExtension(Uri Uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(Uri));
     }
 
-
-
-
-
-
-
-
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
-        if (data.getData() != null && requestCode==1) {
+        if (data.getData() != null && requestCode == 999) {
             final Uri dataUri = data.getData();
 //            binding.userImage.setImageURI(dataUri);
-            StorageReference file = reference.child(System.currentTimeMillis()+"."+getfilleExtension(dataUri));
+            StorageReference file = reference.child(System.currentTimeMillis() + "." + getfilleExtension(dataUri));
             Toast.makeText(this, "Image Sand ", Toast.LENGTH_SHORT).show();
             file.putFile(dataUri).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri -> {
-                final Chat_Model Chat =  new Chat_Model(SandId,uri.toString(),true);
-                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat)
-                    .addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 ->
-                                    chatAdapters.notifyDataSetChanged()
-                            )
-                    );
+//                final Chat_Model Chat =  new Chat_Model(auth.getUid(), uri.toString(),true);
+                final Chat_Model Chat = new Chat_Model(auth.getUid(), uri.toString(), true, UserName, UserBio, UserImage, true);
 
-            })).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
-        }
+                firebaseDatabase.getReference().child("group").child("public").push().setValue(Chat)
+                        .addOnSuccessListener(unused ->
+                                chatAdapters.notifyDataSetChanged()).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+            }));
 
         }
     }
+}

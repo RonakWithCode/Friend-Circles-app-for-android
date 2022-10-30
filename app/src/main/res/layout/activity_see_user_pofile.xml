@@ -28,9 +28,8 @@
             android:src="@drawable/userimage"
             app:riv_oval="true" />
     </LinearLayout>
-
     <LinearLayout
-        android:id="@+id/PhoneText"
+        android:id="@+id/Namebox"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="vertical"
@@ -40,76 +39,55 @@
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagecCntervar">
 
+
         <TextView
-            android:id="@+id/phone"
             android:textColor="@color/green"
             android:layout_marginStart="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About User Info " />
+            android:text="Name" />
         <TextView
-            android:id="@+id/bio"
-            android:textColor="@color/green"
+            android:id="@+id/UserName"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_marginTop="13dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_marginStart="12dp"
-            android:text="User is a user to use this app" />
+            android:text="Name" />
+
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="12dp"
-        android:id="@+id/custom"
+        android:id="@+id/PhoneText"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginTop="12dp"
         android:background="@color/white"
         android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PhoneText">
+        app:layout_constraintTop_toBottomOf="@+id/Namebox">
 
         <TextView
-            android:id="@+id/Custom_Setting"
+            android:id="@+id/phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Custom Settings"
+            android:text="About User Info "
             android:textColor="@color/green" />
 
         <TextView
-            android:id="@+id/Custom_Theme"
+            android:id="@+id/bio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="13dp"
-            android:text= "Change Theme"
-            android:textColor="@color/green"
-            android:textSize="20dp" />
+            android:text="User is a user to use this app"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/storyLinear"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:background="@color/white"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom">
-
-        <TextView
-            android:id="@+id/Story"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Story"
-            android:textColor="@color/green" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_marginTop="12dp"
-            android:id="@+id/ReStory"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

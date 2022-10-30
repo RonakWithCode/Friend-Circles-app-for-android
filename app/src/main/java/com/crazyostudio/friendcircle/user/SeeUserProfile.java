@@ -9,7 +9,7 @@ import com.crazyostudio.friendcircle.databinding.ActivitySeeUserPofileBinding;
 
 public class SeeUserProfile extends AppCompatActivity {
     ActivitySeeUserPofileBinding binding;
-    String UserName,UserImage,UserId,SandId,UserBio;
+    String UserName,UserImage,UserBio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +19,8 @@ public class SeeUserProfile extends AppCompatActivity {
         UserName = getIntent().getStringExtra("name");
         UserImage = getIntent().getStringExtra("Images");
         UserBio = getIntent().getStringExtra("Bio");
-//        UserId = getIntent().getStringExtra("UserId");
-//        getActionBar
-        
-        getWindow().setTitle(UserBio);
-//        android:label
 
-
-
+        binding.UserName.setText(UserName);
         binding.bio.setText(UserBio);
         Glide.with(this).load(UserImage).into(binding.userImage);
 

@@ -15,23 +15,32 @@
         <entry key="..\:/friendcircle/app/src/main/res/drawable/roundcolorbutton.xml" value="0.2735" />
         <entry key="..\:/friendcircle/app/src/main/res/layout-land/activity_main.xml" value="0.4648648648648649" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_change_theme.xml" value="0.2" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_chat.xml" value="0.1" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_chat.xml" value="0.75" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_check_network.xml" value="0.67" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_create_group_chat.xml" value="0.25" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_group_chat.xml" value="0.67" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_group_chat_adapters.xml" value="1.25" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_group_chatr_rceiver.xml" value="0.645" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_group_details.xml" value="0.67" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_invite_group_chat.xml" value="0.67" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_login2.xml" value="0.26875" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_main.xml" value="0.18" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_see_user_pofile.xml" value="0.22" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_see_user_pofile.xml" value="0.6089743589743589" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_settings.xml" value="1.1" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_theme.xml" value="0.5" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/activity_user_details.xml" value="0.12" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_user_profile.xml" value="1.0" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/mainlook.xml" value="0.75" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/receiver.xml" value="3.0" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/receiver_image.xml" value="3.0" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/activity_user_profile.xml" value="0.67" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/app_sander.xml" value="0.75" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/group_sander.xml" value="0.9166666666666666" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/groupchatreceiver.xml" value="2.0" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/groupimagereceiver.xml" value="1.1" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/mainlook.xml" value="0.67" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/receiver.xml" value="4.0" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/receiver_image.xml" value="1.0" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/sander_image.xml" value="0.22" />
-        <entry key="..\:/friendcircle/app/src/main/res/layout/sender.xml" value="0.67" />
+        <entry key="..\:/friendcircle/app/src/main/res/layout/sender.xml" value="0.75" />
         <entry key="..\:/friendcircle/app/src/main/res/layout/story.xml" value="0.25" />
         <entry key="..\:/friendcircle/app/src/main/res/menu/mainitemmenu.xml" value="0.5" />
       </map>
