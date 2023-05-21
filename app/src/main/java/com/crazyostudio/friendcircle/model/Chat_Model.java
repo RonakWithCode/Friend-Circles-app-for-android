@@ -4,12 +4,14 @@ public class Chat_Model {
     private boolean IsImage;
     private String ID,Message,SanderName,SanderBio,SanderImage,SanderStory;
     private long SandTime;
-    private boolean isGroup;
+    private boolean isGroup,isRead;
 
     public Chat_Model(){}
-    public Chat_Model(String ID, String message) {
+    public Chat_Model(String ID, String message,long sandTime,boolean IsRead) {
         this.ID = ID;
         Message = message;
+        SandTime = sandTime;
+        isRead = IsRead;
     }
 
 
@@ -31,12 +33,20 @@ public class Chat_Model {
         this.isGroup = isGroup;
     }
 
-    public Chat_Model(String ID, String message, boolean isImage) {
+    public Chat_Model(String ID, String message, boolean isImage,boolean IsRead) {
         this.ID = ID;
         Message = message;
         IsImage = isImage;
+        isRead = IsRead;
     }
 
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
     public boolean isImage() {
         return IsImage;
     }

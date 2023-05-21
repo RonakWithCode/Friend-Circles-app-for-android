@@ -96,11 +96,9 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (item.getItemId() == R.id.logout) {
             auth.signOut();
-
             startActivity(new Intent(MainActivity.this, Login.class));
             finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

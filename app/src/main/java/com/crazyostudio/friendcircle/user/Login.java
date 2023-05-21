@@ -59,7 +59,7 @@ public class Login extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (user != null) {
-            startActivity(new Intent(Login.this, MainActivity.class));
+            startActivity(new Intent(Login.this, LockMangerActivity.class));
             finish();
         }
     }

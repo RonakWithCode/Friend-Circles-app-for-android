@@ -31,4 +31,10 @@
     <string name="group_chat">Group chat</string>
     <string name="todo">TODO</string>
     <string name="user">User</string>
+    <string name="enter_login_pass">enter login pass</string>
+    <string name="make_pin_for_secure_your_privacy">Make Pin for Secure your Privacy</string>
+    <string name="first_make_fake_pin">First Make fake-PIN</string>
+    <string name="pin_star">****</string>
+    <string name="make_real_pin">Make Real-PIN</string>
+    <string name="tap_make_pin">Tap make pin</string>
 </resources>

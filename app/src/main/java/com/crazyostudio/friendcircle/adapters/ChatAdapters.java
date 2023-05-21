@@ -1,5 +1,6 @@
 package com.crazyostudio.friendcircle.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +19,10 @@ import com.crazyostudio.friendcircle.databinding.SanderImageBinding;
 import com.crazyostudio.friendcircle.databinding.SenderBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatAdapters extends  RecyclerView.Adapter{
     ArrayList<Chat_Model> ChatModels;
@@ -61,7 +65,7 @@ public class ChatAdapters extends  RecyclerView.Adapter{
     @Override
     public int getItemViewType(int position) {
 //        SANDER
-        if (ChatModels.get(position).getID().equals(FirebaseAuth.getInstance().getUid())) {
+            if (ChatModels.get(position).getID().equals(FirebaseAuth.getInstance().getUid())) {
             if (ChatModels.get(position).isImage()) {
                 return IMAGE_SANDER_VIEW_TYPE;
 
@@ -94,11 +98,18 @@ public class ChatAdapters extends  RecyclerView.Adapter{
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Chat_Model chatModel = ChatModels.get(position);
         if (holder.getClass()==SanderViewHolder.class){
-            ((SanderViewHolder)holder).SendBinding.InputText.setText(chatModel.getMessage());
+            ((SanderViewHolder)holder).SendBinding.messageText.setText(chatModel.getMessage());
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+
+            ((SanderViewHolder)holder).SendBinding.messageTime.setText(time);
+
         }
         else if (holder.getClass()==ImageSanderViewHolder.class)
         {
@@ -134,7 +145,13 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             ((GroupReceiverViewHolder)holder).GroupBinding.mas.setText(chatModel.getMessage());
         }
         else {
-            ((ReceiverViewHolder)holder).binding.mas.setText(chatModel.getMessage());
+
+            ((ReceiverViewHolder)holder).binding.messageText.setText(chatModel.getMessage());
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+
+            ((ReceiverViewHolder)holder).binding.messageTime.setText(time);
         }
 
     }
