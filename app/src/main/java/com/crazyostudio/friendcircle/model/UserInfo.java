@@ -2,34 +2,23 @@ package com.crazyostudio.friendcircle.model;
 
 
 public class UserInfo {
-    private String name,bio,userImage,userid,LastStatus,mail,password,ImageName;
+    private String name,bio,userImage,userid,mail,number;
 
-    public UserInfo(String name, String bio, String userImage, String mail, String password) {
+    public UserInfo(String name,String userImage,String mail,String Number) {
         this.name = name;
-        this.bio = bio;
         this.userImage = userImage;
         this.mail = mail;
-        this.password = password;
-    }
-
-    public UserInfo(String name, String bio, String userImage,String mail, String password, String imageName) {
-        this.name = name;
-        this.bio = bio;
-        this.userImage = userImage;
-        this.mail = mail;
-        this.password = password;
-        ImageName = imageName;
+        this.number =Number;
     }
 
     public UserInfo(){}
 
-
-    public String getImageName() {
-        return ImageName;
+    public String getNumber() {
+        return number;
     }
 
-    public void setImageName(String imageName) {
-        ImageName = imageName;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getMail() {
@@ -38,14 +27,6 @@ public class UserInfo {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUserid() {
@@ -80,13 +61,6 @@ public class UserInfo {
         this.userImage = userImage;
     }
 
-    public String getLastStatus() {
-        return LastStatus;
-    }
-
-    public void setLastStatus(String lastStatus) {
-        LastStatus = lastStatus;
-    }
 }
 
 

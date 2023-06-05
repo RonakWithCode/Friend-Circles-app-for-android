@@ -1,34 +1,59 @@
 package com.crazyostudio.friendcircle.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
+import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.crazyostudio.friendcircle.LoadPdf;
 import com.crazyostudio.friendcircle.R;
 import com.crazyostudio.friendcircle.databinding.GroupchatreceiverBinding;
 import com.crazyostudio.friendcircle.databinding.GroupimagereceiverBinding;
 import com.crazyostudio.friendcircle.databinding.ReceiverBinding;
 import com.crazyostudio.friendcircle.databinding.ReceiverImageBinding;
+import com.crazyostudio.friendcircle.databinding.ReceiverpdfBinding;
 import com.crazyostudio.friendcircle.databinding.SanderImageBinding;
+import com.crazyostudio.friendcircle.databinding.SanderPdfBinding;
 import com.crazyostudio.friendcircle.databinding.SenderBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class ChatAdapters extends  RecyclerView.Adapter{
     ArrayList<Chat_Model> ChatModels;
     Context context;
-    int SANDER_VIEW_TYPE=1,IMAGE_SANDER_VIEW_TYPE=11;
-    int GROUP_IMAGE_RECEIVER_VIEW_TYPE=25,GROUP_RECEIVER_VIEW_TYPE =24,RECEIVER_VIEW_TYPE=2,IMAGE_RECEIVER_VIEW_TYPE=22;
+    int SANDER_VIEW_TYPE=1
+            ,IMAGE_SANDER_VIEW_TYPE=11
+            ,SANDER_PDF_VIEW_TYPE=150;
+    int GROUP_IMAGE_RECEIVER_VIEW_TYPE=25
+            ,GROUP_RECEIVER_VIEW_TYPE =24
+            ,RECEIVER_VIEW_TYPE=2
+            ,IMAGE_RECEIVER_VIEW_TYPE=22
+            ,RECEIVER_PDF_VIEW_TYPE=151;
 
     public ChatAdapters(ArrayList<Chat_Model> chatModels, Context context) {
         ChatModels = chatModels;
@@ -40,6 +65,14 @@ public class ChatAdapters extends  RecyclerView.Adapter{
         if (viewType==SANDER_VIEW_TYPE){
             View view = LayoutInflater.from(context).inflate(R.layout.sender,parent,false);
             return new SanderViewHolder(view);
+        }
+        else if (viewType==SANDER_PDF_VIEW_TYPE){
+            View view = LayoutInflater.from(context).inflate(R.layout.sander_pdf,parent,false);
+            return new SanderPDFViewHolder(view);
+        }
+        else if (viewType==RECEIVER_PDF_VIEW_TYPE){
+            View view = LayoutInflater.from(context).inflate(R.layout.receiverpdf,parent,false);
+            return new ReceiverPDFViewHolder(view);
         }
         else if (viewType==IMAGE_SANDER_VIEW_TYPE)
         {
@@ -66,10 +99,12 @@ public class ChatAdapters extends  RecyclerView.Adapter{
     public int getItemViewType(int position) {
 //        SANDER
             if (ChatModels.get(position).getID().equals(FirebaseAuth.getInstance().getUid())) {
-            if (ChatModels.get(position).isImage()) {
-                return IMAGE_SANDER_VIEW_TYPE;
-
-            }
+                if (ChatModels.get(position).isImage()) {
+                    return IMAGE_SANDER_VIEW_TYPE;
+                }
+                else if (ChatModels.get(position).isPDF()){
+                    return SANDER_PDF_VIEW_TYPE;
+                }
         else {
                 return SANDER_VIEW_TYPE;
             }
@@ -79,6 +114,9 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             if (ChatModels.get(position).isImage()) {
                 if (ChatModels.get(position).isGroup()){
                     return GROUP_IMAGE_RECEIVER_VIEW_TYPE;
+                }
+                else if (ChatModels.get(position).isPDF()){
+                    return RECEIVER_PDF_VIEW_TYPE;
                 }
                 else {
                     return IMAGE_RECEIVER_VIEW_TYPE;
@@ -111,6 +149,129 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             ((SanderViewHolder)holder).SendBinding.messageTime.setText(time);
 
         }
+        else if (holder.getClass() == SanderPDFViewHolder.class) {
+            if (chatModel.getFilename().endsWith(".pdf")){
+                ((SanderPDFViewHolder)holder).pdfBinding.pdfIcon.setImageResource(R.drawable.pdf);
+            }
+            else if (chatModel.getFilename().endsWith(".apk")){
+                ((SanderPDFViewHolder)holder).pdfBinding.pdfIcon.setImageResource(R.drawable.apk);
+            }else {
+                ((SanderPDFViewHolder)holder).pdfBinding.pdfIcon.setImageResource(R.drawable.document);
+
+            }
+//            ((SanderPDFViewHolder)holder).pdfBinding.filename.setText(chatModel.getMessage());
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+
+            ((SanderPDFViewHolder)holder).pdfBinding.filename.setText(chatModel.getFilename());
+            ((SanderPDFViewHolder)holder).pdfBinding.size.setText(chatModel.getFileSize());
+//            ((SanderPDFViewHolder)holder).pdfBinding.pages.setText(chatModel.getFilePage());
+            ((SanderPDFViewHolder)holder).pdfBinding.time.setText(time);
+            ((SanderPDFViewHolder)holder).pdfBinding.Download.setOnClickListener(view->
+            {
+                String url = chatModel.getMessage();
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                request.allowScanningByMediaScanner();
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, chatModel.getFilename());
+                DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                manager.enqueue(request);
+                Toast.makeText(context, "Check Notification Bar or Download Folder ", Toast.LENGTH_SHORT).show();
+
+            });
+//                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+//                builder1.setMessage("Choices");
+//                builder1.setCancelable(false);
+
+//                builder1.setPositiveButton(
+//                        "Save",
+//                        (dialog, id) -> {
+//                            dialog.cancel();
+//                            String url = chatModel.getMessage();
+//                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+//                            request.allowScanningByMediaScanner();
+//                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, chatModel.getFilename());
+//                            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+//                            manager.enqueue(request);
+//                        });
+//
+//                builder1.setNegativeButton(
+//                        "Open",
+//                        (dialog, id) -> {
+////                            Intent intent = new Intent(context, LoadPdf.class);
+////                            intent.putExtra("pdf",chatModel.getMessage());
+////                            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, Uri.parse(chatModel.getMessage()));
+//                            String url = chatModel.getMessage();
+//                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+//                            request.allowScanningByMediaScanner();
+//                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, chatModel.getFilename());
+//                            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+//                            manager.enqueue(request);
+//
+//                            try {
+//                                manager.openDownloadedFile(0);
+//                            } catch (FileNotFoundException e) {
+//                                e.printStackTrace();
+//                            }
+//                            Intent intent = new Intent(Intent.ACTION_SEND);
+//                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//                            intent.setType("application/pdf");
+//                            intent.putExtra(Intent.EXTRA_STREAM,chatModel.getMessage());
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            context.startActivity(Intent.createChooser(,"PDF"));
+
+//                            intent.addCategory(Intent.DO);
+
+            // Optionally, specify a URI for the file that should appear in the
+            // system file picker when it loads.
+//                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, chatModel.getMessage());
+//
+//                            context.startActivity(intent);
+//                            dialog.cancel();
+//                AlertDialog alert11 = builder1.create();
+//                alert11.show();
+
+//                ProgressDialog dialog;
+//                dialog = new ProgressDialog(context);
+//                dialog.setTitle("Downloading ... ");
+
+//                dialog.setMessage(""+reference);
+//            });
+        }
+        else if (holder.getClass() == ReceiverPDFViewHolder.class) {
+            if (chatModel.getFilename().endsWith(".pdf")){
+                ((ReceiverPDFViewHolder)holder).pdfBinding.pdfIcon.setImageResource(R.drawable.pdf);
+            }
+            else if (chatModel.getFilename().endsWith(".apk")){
+                ((ReceiverPDFViewHolder)holder).pdfBinding.pdfIcon.setImageResource(R.drawable.apk);
+            }else {
+                ((ReceiverPDFViewHolder)holder).pdfBinding.pdfIcon.setImageResource(R.drawable.document);
+            }
+//            ((SanderPDFViewHolder)holder).pdfBinding.filename.setText(chatModel.getMessage());
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+            ((ReceiverPDFViewHolder)holder).pdfBinding.filename.setText(chatModel.getFilename());
+            ((ReceiverPDFViewHolder)holder).pdfBinding.size.setText(chatModel.getFileSize());
+//            ((ReceiverPDFViewHolder)holder).pdfBinding.pages.setText(chatModel.getFilePage());
+            ((ReceiverPDFViewHolder)holder).pdfBinding.time.setText(time);
+            ((ReceiverPDFViewHolder)holder).pdfBinding.Download.setOnClickListener(view->
+            {
+                String url = chatModel.getMessage();
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                request.allowScanningByMediaScanner();
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, chatModel.getFilename());
+                DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                manager.enqueue(request);
+                Toast.makeText(context, "Check Notification Bar or Download Folder ", Toast.LENGTH_SHORT).show();
+
+            });
+        }
         else if (holder.getClass()==ImageSanderViewHolder.class)
         {
             Glide.with(context).load(chatModel.getMessage()).into(((ImageSanderViewHolder)holder).SendBinding.SanderImageview);
@@ -128,8 +289,6 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chatModel.getMessage())));
 
             });
-            
-            
         }
 
         else if (holder.getClass()==ImageReceiverViewHolder.class)
@@ -205,4 +364,22 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                 GroupBinding = GroupimagereceiverBinding.bind(itemView);
             }
     }
+
+    public static class SanderPDFViewHolder extends RecyclerView.ViewHolder {
+        SanderPdfBinding pdfBinding;
+
+        public SanderPDFViewHolder(@NonNull View itemView) {
+            super(itemView);
+            pdfBinding = SanderPdfBinding.bind(itemView);
+        }
+    }
+    public static class ReceiverPDFViewHolder extends RecyclerView.ViewHolder {
+        ReceiverpdfBinding pdfBinding;
+
+        public ReceiverPDFViewHolder(@NonNull View itemView) {
+            super(itemView);
+            pdfBinding = ReceiverpdfBinding.bind(itemView);
+        }
+    }
+
 }

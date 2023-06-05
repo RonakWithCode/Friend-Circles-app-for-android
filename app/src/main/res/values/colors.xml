@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
     <color name="Link">#027ebc</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="Blue">#03A9F4</color>
+    <color name="Dark_Blacks">#ffff</color>
+
     <color name="lite_blue">#5CE1E6</color>
     <color name="Red">#FF0000</color>
     <color name="Red_Color">#B12704</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="Editexblack">#FF000000</color>
+    <color name="Editextwhite">#ffff</color>
     <color name="Sever_black">#202c33</color>
     <color name="TextPlan">#676767</color>
     <color name="sealvar">#D5BFBF</color>
@@ -23,6 +26,7 @@
     <color name="PintButtonEnd">#E87FFF</color>
     <color name="Dark_Black">#101010</color>
     <color name="white">#ffffff</color>
+    <color name="ChatWhite">#ffffff</color>
     <color name="InfraRed">#F94A76</color>
     <color name="ic_launcher_background">#FF6559</color>
     <color name="backgroundColor">#E8E8E8</color>
@@ -30,4 +34,12 @@
     <color name="white_Look">#EBECEE</color>
     <color name="green">#005c4b</color>
     <color name="Chat_Color_green">#d9fdd3</color>
+
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#D5A5A3A3</color>
+    <color name="colorAccent">#E95345</color>
+    <color name="trueBlack">#000000</color>
+    <color name="otp_editext_color">#DAE2DFDF</color>
+
+
 </resources>

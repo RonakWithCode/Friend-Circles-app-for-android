@@ -23,7 +23,8 @@
             android:layout_margin="5dp"
             android:minHeight="200dp"
             android:contentDescription="@string/todo"
-            android:scaleType="fitXY"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
             tools:src="@tools:sample/avatars" />
 
     </LinearLayout>

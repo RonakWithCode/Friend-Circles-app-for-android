@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.crazyostudio.friendcircle.R;
 import com.crazyostudio.friendcircle.adapters.ChatAdapters;
 import com.crazyostudio.friendcircle.databinding.ActivityGroupChatBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
@@ -43,6 +45,22 @@ public class GroupChat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
+            try {
+                binding.getRoot().setBackgroundColor(R.color.black);
+//                binding.getRoot().setBackgroundResource(R.drawable.bglay);
+
+            }catch (Exception e){
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            try {
+                binding.getRoot().setBackgroundResource(R.drawable.bglayout);
+            }catch (Exception ignored){
+
+            }
+        }
         firebaseDatabase = FirebaseDatabase.getInstance();
         Objects.requireNonNull(getSupportActionBar()).hide();
         reference = FirebaseStorage.getInstance().getReference("ChatImage");
@@ -86,7 +104,6 @@ public class GroupChat extends AppCompatActivity {
                         _userInfo = snapshot1.getValue(UserInfo.class);
                         assert _userInfo != null;
                         UserName = _userInfo.getName();
-                        UserImage = _userInfo.getImageName();
                         UserBio = _userInfo.getBio();
                     }
                 }

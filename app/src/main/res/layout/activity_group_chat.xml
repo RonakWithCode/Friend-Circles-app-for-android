@@ -23,7 +23,7 @@
             android:id="@+id/BackBts"
             android:layout_width="20dp"
             android:layout_height="32dp"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             android:src="@drawable/img"
             app:riv_oval="true" />
 
@@ -33,8 +33,8 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginStart="30dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/userimage"
+            android:scaleType="center"
+            android:src="@drawable/ic_baseline_group_24"
             app:riv_border_color="#4A4A4A"
             app:riv_border_width="1dp"
             app:riv_corner_radius="30dp"
@@ -47,7 +47,7 @@
             android:layout_marginStart="23dp"
             android:layout_marginTop="6dp"
             android:maxLength="24"
-            android:text="Ronak jain"
+            android:text="@string/public_group_chating"
             android:textColor="@color/white"
             android:textSize="19sp"
             android:textStyle="bold" />

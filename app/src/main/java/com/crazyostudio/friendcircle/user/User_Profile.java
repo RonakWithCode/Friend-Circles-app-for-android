@@ -55,7 +55,6 @@ public class User_Profile extends AppCompatActivity {
                         assert _userInfo != null;
                         Glide.with(User_Profile.this).load(_userInfo.getUserImage()).into(binding.userImage);
                         binding.Name.setText(_userInfo.getName());
-                        binding.bio.setText(_userInfo.getBio());
                         binding.Mail.setText(_userInfo.getMail());
                     }
                 }
@@ -91,33 +90,13 @@ public class User_Profile extends AppCompatActivity {
 
             }
         });
-        binding.bio.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (binding.bio.getText().toString().isEmpty()) {
-                    binding.bio.setError("Enter you bio ");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         binding.next.setOnClickListener(view -> {
             bar.setMessage("Change in Database");
             bar.show();
             if (IsImageUpdate) {
-                if (!binding.Name.getText().toString().isEmpty() && !binding.bio.getText().toString().isEmpty()) {
+                if (!binding.Name.getText().toString().isEmpty()) {
                     StorageReference file = reference.child(FirebaseAuth.getInstance().getUid()+"."+getfilleExtension(dataUri));
                     file.putFile(dataUri).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri -> {
-                        database.getReference("UserInfo").child(Objects.requireNonNull(auth.getUid())).child("bio").setValue(binding.bio.getText().toString());
                         database.getReference("UserInfo").child(auth.getUid()).child("name").setValue(binding.Name.getText().toString());
                         database.getReference("UserInfo").child(auth.getUid()).child("userImage").setValue(uri);
                         if (bar.isShowing()) {
@@ -139,8 +118,7 @@ public class User_Profile extends AppCompatActivity {
                     Toast.makeText(this, "Check your input", Toast.LENGTH_SHORT).show();
                 }
             }else {
-                if (!binding.Name.getText().toString().isEmpty() && !binding.bio.getText().toString().isEmpty()) {
-                    database.getReference("UserInfo").child(Objects.requireNonNull(auth.getUid())).child("bio").setValue(binding.bio.getText().toString());
+                if (!binding.Name.getText().toString().isEmpty()) {
                     database.getReference("UserInfo").child(auth.getUid()).child("name").setValue(binding.Name.getText().toString());
                     if (bar.isShowing()) {
                         bar.dismiss();

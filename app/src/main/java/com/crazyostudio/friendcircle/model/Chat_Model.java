@@ -4,7 +4,8 @@ public class Chat_Model {
     private boolean IsImage;
     private String ID,Message,SanderName,SanderBio,SanderImage,SanderStory;
     private long SandTime;
-    private boolean isGroup,isRead;
+    private boolean isGroup,isRead,IsPDF;
+    private String Filename,FileSize,FilePage;
 
     public Chat_Model(){}
     public Chat_Model(String ID, String message,long sandTime,boolean IsRead) {
@@ -33,11 +34,58 @@ public class Chat_Model {
         this.isGroup = isGroup;
     }
 
-    public Chat_Model(String ID, String message, boolean isImage,boolean IsRead) {
+    public Chat_Model(String ID, String message, boolean isImage,boolean IsRead,Boolean isPDF,long sandTime) {
         this.ID = ID;
         Message = message;
         IsImage = isImage;
         isRead = IsRead;
+        IsPDF = isPDF;
+        SandTime = sandTime;
+    }
+
+    public Chat_Model(String ID, String message, long sandTime, boolean isImage, boolean isGroup, boolean isRead, boolean isPDF, String filename, String fileSize, String filePage) {
+        this.ID = ID;
+        Message = message;
+        SandTime = sandTime;
+        IsImage = isImage;
+        this.isGroup = isGroup;
+        this.isRead = isRead;
+        IsPDF = isPDF;
+        Filename = filename;
+        FileSize = fileSize;
+        FilePage = filePage;
+    }
+
+    public String getFilename() {
+        return Filename;
+    }
+
+    public void setFilename(String filename) {
+        Filename = filename;
+    }
+
+    public String getFileSize() {
+        return FileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        FileSize = fileSize;
+    }
+
+    public String getFilePage() {
+        return FilePage;
+    }
+
+    public void setFilePage(String filePage) {
+        FilePage = filePage;
+    }
+
+    public boolean isPDF() {
+        return IsPDF;
+    }
+
+    public void setPDF(boolean PDF) {
+        IsPDF = PDF;
     }
 
     public boolean isRead() {

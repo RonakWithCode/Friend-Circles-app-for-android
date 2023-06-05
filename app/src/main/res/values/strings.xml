@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">friend circle</string>
+    <string name="app_name">Friend Circle</string>
     <string name="crazy_studio">Crazy Studio</string>
     <string name="HaveAccount">Already have an Account?</string>
     <string name="create_account">Create Account</string>
@@ -37,4 +37,29 @@
     <string name="pin_star">****</string>
     <string name="make_real_pin">Make Real-PIN</string>
     <string name="tap_make_pin">Tap make pin</string>
+    <string name="about">About</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="terms_amp_privacy_policy"><![CDATA[Terms & Privacy Policy]]></string>
+    <string name="accept_terms_and_conditions">Accept Terms and Conditions  </string>
+    <string name="read_more"><a href="https://crazy-studio-website.web.app/PrivacyPolicy.html">Read More</a></string>
+    <string name="public_group_chating">Public Group Chating</string>
+    <string name="icon">Icon</string>
+    <string name="otp">OTP</string>
+
+
+    <string name="otp_title">Please enter the 6 digit verification code</string>
+    <string name="otp_button_text">VERIFY</string>
+    <string name="resend_msg">Didn’t receive the OTP?</string>
+    <string name="resend_again_msg">Resend again</string>
+    <string name="sent_to_91_xxxx_xxx">sent to +91 XXXX XXX</string>
+    <string name="change">Change</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="tap_to_go">Tap to go</string>
+    <string name="text_o">view</string>
+    <string name="icon_of_camrea">icon of camrea</string>
+    <string name="pdf_icon">Pdf Icon</string>
+
+
 </resources>

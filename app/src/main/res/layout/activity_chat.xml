@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/bglayout"
     android:layout_height="match_parent"
     tools:context=".Chats.chat">
 
@@ -23,7 +22,7 @@
             android:id="@+id/BackBts"
             android:layout_width="20dp"
             android:layout_height="32dp"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             android:src="@drawable/img"
             app:riv_oval="true" />
 
@@ -33,7 +32,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginStart="30dp"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             android:src="@drawable/userimage"
             app:riv_border_color="#4A4A4A"
             app:riv_border_width="1dp"
@@ -94,15 +93,13 @@
 
         <ImageView
             android:id="@+id/imageBts"
-            android:layout_width="32dp"
+            android:layout_width="37dp"
             android:layout_height="37dp"
-            android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/InputText"
             app:layout_constraintStart_toStartOf="@+id/InputText"
             app:layout_constraintTop_toTopOf="@+id/InputText"
-            app:layout_constraintVertical_bias="0.461"
-            app:srcCompat="@drawable/ic_photo_camera_black_48dp"
+            android:src="@drawable/ic_photo_black_48dp"
             android:contentDescription="@string/todo" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

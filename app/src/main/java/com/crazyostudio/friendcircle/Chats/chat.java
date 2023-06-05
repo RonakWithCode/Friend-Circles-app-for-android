@@ -1,27 +1,35 @@
 package com.crazyostudio.friendcircle.Chats;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.MediaRecorder;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
+import android.provider.ContactsContract;
+import android.provider.OpenableColumns;
+import android.text.Layout;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.crazyostudio.friendcircle.R;
 import com.crazyostudio.friendcircle.adapters.ChatAdapters;
 import com.crazyostudio.friendcircle.databinding.ActivityChatBinding;
+import com.crazyostudio.friendcircle.databinding.SandingoptionsBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
 import com.crazyostudio.friendcircle.user.SeeUserProfile;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -33,37 +41,53 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class chat extends AppCompatActivity {
     ActivityChatBinding binding;
     private StorageReference reference;
-    String UserName,UserImage,UserId,SandId,UserBio;
+    String UserName, UserImage, UserId, SandId, UserBio;
     FirebaseDatabase firebaseDatabase;
+    int documentCode = 1, CameraCode = 2,ContactCode=3;
+    private static final long KB_SIZE = 1024; // 1 KB in bytes
+    private static final long MB_SIZE = KB_SIZE * 1024; // 1 MB in bytes
+
     FirebaseAuth auth;
     ChatAdapters chatAdapters;
-    String sanderRoom,recRoom;
-
-    private static final int REQUEST_PERMISSION_CODE = 100;
-    private static final String TAG = chat.class.getSimpleName();
-
-//    private Button recordButton;
-    private MediaRecorder mediaRecorder;
-    private String outputFile;
+    String sanderRoom, recRoom;
 
 
-
-    @SuppressLint("NotifyDataSetChanged")
-
+    @SuppressLint({"NotifyDataSetChanged", "ResourceAsColor"})
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
+            try {
+                binding.getRoot().setBackgroundColor(R.color.black);
+//                binding.getRoot().setBackgroundResource(R.drawable.bglay);
+
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            try {
+                binding.getRoot().setBackgroundResource(R.drawable.bglayout);
+            } catch (Exception ignored) {
+
+            }
+        }
         setContentView(binding.getRoot());
+////            try {
+////            binding.getRoot().setBackgroundResource(R.drawable.bglay);
+////
+////        }catch (Exception e){
+////            binding.getRoot().setBackgroundColor(R.color.black);
+////        }
         firebaseDatabase = FirebaseDatabase.getInstance();
         Objects.requireNonNull(getSupportActionBar()).hide();
         reference = FirebaseStorage.getInstance().getReference("ChatImage");
@@ -76,9 +100,9 @@ public class chat extends AppCompatActivity {
 
         binding.toolbar2.setOnClickListener(view -> {
             Intent intent = new Intent(this, SeeUserProfile.class);
-            intent.putExtra("name",UserName);
-            intent.putExtra("Images",UserImage);
-            intent.putExtra("Bio",UserBio);
+            intent.putExtra("name", UserName);
+            intent.putExtra("Images", UserImage);
+            intent.putExtra("Bio", UserBio);
             startActivity(intent);
         });
 
@@ -88,7 +112,7 @@ public class chat extends AppCompatActivity {
         binding.BackBts.setOnClickListener(view -> finish());
 
         ArrayList<Chat_Model> ChatModels = new ArrayList<>();
-        chatAdapters = new ChatAdapters(ChatModels,this);
+        chatAdapters = new ChatAdapters(ChatModels, this);
         binding.recyclerView2.setAdapter(chatAdapters);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView2.setLayoutManager(layoutManager);
@@ -103,7 +127,7 @@ public class chat extends AppCompatActivity {
 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ChatModels.clear();
-                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                     Chat_Model _ChatModel = snapshot1.getValue(Chat_Model.class);
 //                    if (!_ChatModel.isRead()) {
@@ -121,37 +145,55 @@ public class chat extends AppCompatActivity {
             }
         });
 
-        binding.imageBts.setOnClickListener(view ->
+//        binding.imageBts.setOnClickListener(view ->
+//
+
+
+        binding.imageBts.setOnClickListener(view -> {
+            SandingoptionsBinding sandingoptionsBinding = SandingoptionsBinding.inflate(getLayoutInflater());
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view1 = layoutInflater.inflate(R.layout.sandingoptions, null);
+            PopupWindow popupWindow = new PopupWindow(view1, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+//            popupWindow.showAtLocation(binding.getRoot(),Gravity.BOTTOM,0,0);
+            sandingoptionsBinding.getRoot().setGravity(Gravity.BOTTOM);
+            sandingoptionsBinding.getRoot().setY(0);
+            sandingoptionsBinding.getRoot().setX(0);
+            popupWindow.setContentView(sandingoptionsBinding.getRoot());
+            popupWindow.showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, 0);
+
+            sandingoptionsBinding.camera.setOnClickListener(view2 -> {
                 ImagePicker.with(this)
                         .crop()
                         .compress(1024)
                         .maxResultSize(800, 800)
-                        .start(1));
+                        .start(1);
+//                Intent intent = new Intent();
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                intent.setType("image/*");
+//                startActivityForResult(intent, CameraCode);
+//            browseDocuments();
+            });
+            sandingoptionsBinding.document.setOnClickListener(view2 -> {
+                browseDocuments();
+            });
+            sandingoptionsBinding.contact.setOnClickListener(view3 -> {
+                final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(pickContact, ContactCode);
+            });
+        });
 
-
-
-//        binding.SandBts.setOnClickListener(view -> {
-//            if (!binding.InputText.getText().toString().isEmpty()) {
-//                final Chat_Model Chat =  new Chat_Model(SandId,binding.InputText.getText().toString(),System.currentTimeMillis(),false);
-//                binding.InputText.setText("");
-//                firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
-//            }
-//            else {
-//                Toast.makeText(this, "Enter your text", Toast.LENGTH_SHORT).show();
-//            }
-//        });
         binding.SandBts.setOnClickListener(view -> {
-            if (isRecording()) {
-                stopRecording();
+            if (!binding.InputText.getText().toString().isEmpty()) {
+                final Chat_Model Chat = new Chat_Model(SandId, binding.InputText.getText().toString(), System.currentTimeMillis(), false);
+                binding.InputText.setText("");
+                firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
             } else {
-                if (checkPermission()) {
-                    startRecording();
-                } else {
-                    requestPermission();
-                }
+                Toast.makeText(this, "Enter your text", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
+
     private String filletExtension(Uri Uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -159,86 +201,142 @@ public class chat extends AppCompatActivity {
     }
 
 
-    private boolean checkPermission() {
-        int result = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        return result == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(chat.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_PERMISSION_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startRecording();
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void startRecording() {
-        mediaRecorder = new MediaRecorder();
-        outputFile = Environment.getDownloadCacheDirectory().getAbsolutePath() + "/recording.3gp";
-
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(outputFile);
-
-        try {
-            mediaRecorder.prepare();
-            mediaRecorder.start();
-//            recordButton.setText("Stop Recording");
-            Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Log.e(TAG, "startRecording: " + e.getMessage());
-        }
-    }
-
-    private void stopRecording() {
-        if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            mediaRecorder = null;
-//            recordButton.setText("Start Recording");
-            Toast.makeText(this, "Recording stopped. File saved to " + outputFile, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private boolean isRecording() {
-        return mediaRecorder != null;
-    }
-
-
-
-
-
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "Range"})
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
-        if (data.getData() != null && requestCode==1) {
+        if (data.getData() != null && requestCode == 1) {
             final Uri dataUri = data.getData();
 //            binding.userImage.setImageURI(dataUri);
-            StorageReference file = reference.child(System.currentTimeMillis()+"."+ filletExtension(dataUri));
+            long Time = System.currentTimeMillis();
+            StorageReference file = reference.child(Time + "." + filletExtension(dataUri));
             Toast.makeText(this, "Image Sand ", Toast.LENGTH_SHORT).show();
             file.putFile(dataUri).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri -> {
-                final Chat_Model Chat =  new Chat_Model(SandId,uri.toString(),true,false);
-                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat)
-                    .addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 ->
-                                    chatAdapters.notifyDataSetChanged()
-                            )
-                    );
-
+                final Chat_Model Chat = new Chat_Model(SandId, uri.toString(), true, false, false, Time);
+                firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
             })).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
-        }
+        } else if (data.getData() != null && requestCode == documentCode) {
+            if (resultCode == RESULT_OK) {
+                // Get the Uri of the selected file
+                Uri uri = data.getData();
+
+                /*
+                 * Get the file's content URI from the incoming Intent,
+                 * then query the server app to get the file's display name
+                 * and size.
+                 */
+                Uri returnUri = data.getData();
+                Cursor returnCursor =
+                        getContentResolver().query(returnUri, null, null, null, null);
+                /*
+                 * Get the column indexes of the data in the Cursor,
+                 * move to the first row in the Cursor, get the data,
+                 * and display it.
+                 */
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+                String size;
+                returnCursor.moveToFirst();
+                if (returnCursor.getLong(sizeIndex) >= MB_SIZE) {
+                    size = (returnCursor.getLong(sizeIndex) / MB_SIZE) + " MB";
+                } else if (returnCursor.getLong(sizeIndex) >= KB_SIZE) {
+                    size = (returnCursor.getLong(sizeIndex) / KB_SIZE) + " KB";
+                } else {
+                    size = returnCursor.getLong(sizeIndex) + " bytes";
+                }
+
+
+                long Time = System.currentTimeMillis();
+                StorageReference file = reference.child(Time + returnCursor.getString(nameIndex));
+                Toast.makeText(this, "Image PDF ", Toast.LENGTH_SHORT).show();
+//                String finalDisplayName = displayName;
+                file.putFile(uri).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri1 -> {
+
+                    final Chat_Model Chat = new Chat_Model(SandId, uri1.toString(), Time, false, false, false, true, returnCursor.getString(nameIndex), size, "1");
+                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
+
+                }).addOnFailureListener(e -> {
+                }));
+            }
+        } else if (data.getData() != null && requestCode == ContactCode) {
+            Uri contactUri = data.getData();
+            String[] columns = {ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.HAS_PHONE_NUMBER};
+            Cursor cursor = getContentResolver().query(contactUri, columns, null, null, null);
+
+            int ColumeIndex_ID = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+            int ColumeIndex_DISPLAY_NAME = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+            int ColumeIndex_HAS_PHONE_NUMBER = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
+
+            while(cursor.moveToNext())
+            {
+                String id = cursor.getString(ColumeIndex_ID);
+                String name = cursor.getString(ColumeIndex_DISPLAY_NAME);
+                String has_phone = cursor.getString(ColumeIndex_HAS_PHONE_NUMBER);
+                String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+
+                if(!has_phone.endsWith("0"))
+                {
+                    System.out.println(name);
+
+                    final Chat_Model Chat = new Chat_Model(SandId, name, 15695, false, false, false, true, number, "queryFieldss", "1");
+                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).
+                            addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
+                }
+                else {
+                    final Chat_Model Chat = new Chat_Model(SandId, name, 15695, false, false, false, true, number, "queryFieldss", "1");
+                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).
+                            addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
+
+                }
+            }
+
+            cursor.close();
+
+
+
+
+
+
 
         }
     }
+    private void browseDocuments(){
+        String[] mimeTypes =
+                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                        "text/plain",
+                        "application/pdf",
+                        "application/zip",
+                        "image/*"
+                };
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(Intent.createChooser(intent,"ChooseFile"), documentCode);
+    }
+    @SuppressLint("Range")
+    public String GetPhoneNumber(String id,Uri uri)
+    {
+        String number = "";
+        Cursor phones = getContentResolver().query(uri, null, ContactsContract.CommonDataKinds.Phone._ID + " = " + id, null, null);
+
+        if(phones.getCount() > 0)
+        {
+
+            number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+            System.out.println(number);
+        }
+
+        phones.close();
+
+        return number;
+    }
+
+}
