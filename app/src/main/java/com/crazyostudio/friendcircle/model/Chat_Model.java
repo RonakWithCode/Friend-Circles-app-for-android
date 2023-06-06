@@ -4,9 +4,8 @@ public class Chat_Model {
     private boolean IsImage;
     private String ID,Message,SanderName,SanderBio,SanderImage,SanderStory;
     private long SandTime;
-    private boolean isGroup,isRead,IsPDF;
+    private boolean isGroup,isRead,IsPDF,IsContact;
     private String Filename,FileSize,FilePage;
-
     public Chat_Model(){}
     public Chat_Model(String ID, String message,long sandTime,boolean IsRead) {
         this.ID = ID;
@@ -55,10 +54,30 @@ public class Chat_Model {
         FileSize = fileSize;
         FilePage = filePage;
     }
+    public Chat_Model(String ID, String message, long sandTime, boolean isImage, boolean isGroup, boolean isRead, boolean isPDF,Boolean isContact ,String filename) {
+        this.ID = ID;
+        Message = message;
+        SandTime = sandTime;
+        IsImage = isImage;
+        this.isGroup = isGroup;
+        this.isRead = isRead;
+        IsPDF = isPDF;
+        IsContact = isContact;
+        Filename = filename;
+    }
 
+    public boolean isContact() {
+        return IsContact;
+    }
+
+    public void setContact(boolean contact) {
+        IsContact = contact;
+    }
     public String getFilename() {
         return Filename;
     }
+
+
 
     public void setFilename(String filename) {
         Filename = filename;

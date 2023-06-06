@@ -3,6 +3,7 @@ package com.crazyostudio.friendcircle.Chats;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class chat extends AppCompatActivity {
-    ActivityChatBinding binding;
+    public static ActivityChatBinding binding;
     private StorageReference reference;
     String UserName, UserImage, UserId, SandId, UserBio;
     FirebaseDatabase firebaseDatabase;
@@ -177,8 +178,9 @@ public class chat extends AppCompatActivity {
                 browseDocuments();
             });
             sandingoptionsBinding.contact.setOnClickListener(view3 -> {
-                final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(pickContact, ContactCode);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, ContactsContract.Contacts.CONTENT_URI);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+                startActivityForResult(intent, ContactCode);
             });
         });
 
@@ -261,43 +263,27 @@ public class chat extends AppCompatActivity {
                 }));
             }
         } else if (data.getData() != null && requestCode == ContactCode) {
-            Uri contactUri = data.getData();
-            String[] columns = {ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.HAS_PHONE_NUMBER};
-            Cursor cursor = getContentResolver().query(contactUri, columns, null, null, null);
 
-            int ColumeIndex_ID = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-            int ColumeIndex_DISPLAY_NAME = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            int ColumeIndex_HAS_PHONE_NUMBER = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
+            Cursor cursor = null;
+            try {
+                String phoneNo = null;
+                String name = null;
 
-            while(cursor.moveToNext())
-            {
-                String id = cursor.getString(ColumeIndex_ID);
-                String name = cursor.getString(ColumeIndex_DISPLAY_NAME);
-                String has_phone = cursor.getString(ColumeIndex_HAS_PHONE_NUMBER);
-                String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                Uri uri = data.getData();
+                cursor = getContentResolver().query(uri, null, null, null, null);
+                cursor.moveToFirst();
+                int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int  nameIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                phoneNo = cursor.getString(phoneIndex);
+                name = cursor.getString(nameIndex);
 
+                final Chat_Model Chat = new Chat_Model(SandId, name, System.currentTimeMillis(), false, false, false, false, true,phoneNo);
+                firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).
+                        addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
 
-                if(!has_phone.endsWith("0"))
-                {
-                    System.out.println(name);
-
-                    final Chat_Model Chat = new Chat_Model(SandId, name, 15695, false, false, false, true, number, "queryFieldss", "1");
-                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).
-                            addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
-                }
-                else {
-                    final Chat_Model Chat = new Chat_Model(SandId, name, 15695, false, false, false, true, number, "queryFieldss", "1");
-                    firebaseDatabase.getReference().child("chats").child(sanderRoom).push().setValue(Chat).addOnSuccessListener(unused -> firebaseDatabase.getReference().child("chats").child(recRoom).push().setValue(Chat).
-                            addOnSuccessListener(unused1 -> chatAdapters.notifyDataSetChanged()));
-
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            cursor.close();
-
-
-
-
 
 
 
