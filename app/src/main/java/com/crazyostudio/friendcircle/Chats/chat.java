@@ -3,7 +3,6 @@ package com.crazyostudio.friendcircle.Chats;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,14 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.OpenableColumns;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,7 +38,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -83,12 +78,6 @@ public class chat extends AppCompatActivity {
             }
         }
         setContentView(binding.getRoot());
-////            try {
-////            binding.getRoot().setBackgroundResource(R.drawable.bglay);
-////
-////        }catch (Exception e){
-////            binding.getRoot().setBackgroundColor(R.color.black);
-////        }
         firebaseDatabase = FirebaseDatabase.getInstance();
         Objects.requireNonNull(getSupportActionBar()).hide();
         reference = FirebaseStorage.getInstance().getReference("ChatImage");
@@ -178,8 +167,11 @@ public class chat extends AppCompatActivity {
                 browseDocuments();
             });
             sandingoptionsBinding.contact.setOnClickListener(view3 -> {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, ContactsContract.Contacts.CONTENT_URI);
-                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, ContactsContract.Contacts.CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+//                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+//                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
                 startActivityForResult(intent, ContactCode);
             });
         });

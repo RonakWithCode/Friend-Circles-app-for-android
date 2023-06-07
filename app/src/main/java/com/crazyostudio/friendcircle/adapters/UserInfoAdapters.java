@@ -85,8 +85,6 @@ public class UserInfoAdapters extends RecyclerView.Adapter<UserInfoAdapters.User
     public int getItemCount() {
         return userInfo.size();
     }
-
-
     public static class UserInfoAdaptersViewHolder  extends RecyclerView.ViewHolder {
         MainlookBinding binding;
 
@@ -95,5 +93,5 @@ public class UserInfoAdapters extends RecyclerView.Adapter<UserInfoAdapters.User
             binding = MainlookBinding.bind(itemView);
         }
     }
-    }
+}
 

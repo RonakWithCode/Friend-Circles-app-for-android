@@ -60,6 +60,8 @@
     <string name="text_o">view</string>
     <string name="icon_of_camrea">icon of camrea</string>
     <string name="pdf_icon">Pdf Icon</string>
+    <string name="copy_name">Copy Name</string>
+    <string name="copy_number">Copy Number</string>
 
 
 </resources>

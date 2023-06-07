@@ -1,7 +1,10 @@
 package com.crazyostudio.friendcircle.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,11 +15,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.crazyostudio.friendcircle.R;
 import com.crazyostudio.friendcircle.databinding.GroupchatreceiverBinding;
@@ -28,6 +33,7 @@ import com.crazyostudio.friendcircle.databinding.ReceiverpdfBinding;
 import com.crazyostudio.friendcircle.databinding.SanderImageBinding;
 import com.crazyostudio.friendcircle.databinding.SanderPdfBinding;
 import com.crazyostudio.friendcircle.databinding.SenderBinding;
+import com.crazyostudio.friendcircle.databinding.SnadercontactlayoutBinding;
 import com.crazyostudio.friendcircle.model.Chat_Model;
 import com.crazyostudio.friendcircle.model.UserInfo;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,14 +51,16 @@ public class ChatAdapters extends  RecyclerView.Adapter{
     ArrayList<Chat_Model> ChatModels;
     Context context;
     int SANDER_VIEW_TYPE=1
-            ,IMAGE_SANDER_VIEW_TYPE=11
-            ,SANDER_PDF_VIEW_TYPE=150;
-    int GROUP_IMAGE_RECEIVER_VIEW_TYPE=25
-            ,GROUP_RECEIVER_VIEW_TYPE =24
-            ,RECEIVER_VIEW_TYPE=2
-            ,IMAGE_RECEIVER_VIEW_TYPE=22
-            ,RECEIVER_PDF_VIEW_TYPE=151
-            ,RECEIVER_CONTACT_VIEW_TYPE=152;
+            ,IMAGE_SANDER_VIEW_TYPE=2
+            ,SANDER_PDF_VIEW_TYPE=3
+            ,SANDER_CONTACT_VIEW_TYPE=4;
+
+    int GROUP_IMAGE_RECEIVER_VIEW_TYPE=101
+            ,GROUP_RECEIVER_VIEW_TYPE =102
+            ,RECEIVER_VIEW_TYPE=103
+            ,IMAGE_RECEIVER_VIEW_TYPE=104
+            ,RECEIVER_PDF_VIEW_TYPE=105
+            ,RECEIVER_CONTACT_VIEW_TYPE=106;
 
     public ChatAdapters(ArrayList<Chat_Model> chatModels, Context context) {
         ChatModels = chatModels;
@@ -68,6 +76,10 @@ public class ChatAdapters extends  RecyclerView.Adapter{
         else if (viewType==SANDER_PDF_VIEW_TYPE){
             View view = LayoutInflater.from(context).inflate(R.layout.sander_pdf,parent,false);
             return new SanderPDFViewHolder(view);
+        }
+        else if (viewType==SANDER_CONTACT_VIEW_TYPE){
+            View view = LayoutInflater.from(context).inflate(R.layout.snadercontactlayout,parent,false);
+            return new SANDERCONTACTViewHolder(view);
         }
         else if (viewType==RECEIVER_PDF_VIEW_TYPE){
             View view = LayoutInflater.from(context).inflate(R.layout.receiverpdf,parent,false);
@@ -97,20 +109,24 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             return new ReceiverViewHolder(view);
         }
     }
-
     @Override
     public int getItemViewType(int position) {
-//        SANDER
+//   SANDER
         if (ChatModels.get(position).getID().equals(FirebaseAuth.getInstance().getUid())) {
             if (ChatModels.get(position).isImage()) {
                 return IMAGE_SANDER_VIEW_TYPE;
             } else if (ChatModels.get(position).isPDF()) {
                 return SANDER_PDF_VIEW_TYPE;
-            } else {
+            }
+            else if (ChatModels.get(position).isContact()) {
+                return SANDER_CONTACT_VIEW_TYPE;
+            }
+
+            else {
                 return SANDER_VIEW_TYPE;
             }
         }
-//
+//  Receiver
         else {
             if (ChatModels.get(position).isGroup()) {
                 if (ChatModels.get(position).isImage()) {
@@ -127,8 +143,7 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             }
         }
     }
-
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Chat_Model chatModel = ChatModels.get(position);
@@ -170,69 +185,8 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                 DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
                 manager.enqueue(request);
                 Toast.makeText(context, "Check Notification Bar or Download Folder ", Toast.LENGTH_SHORT).show();
-
             });
-//                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-//                builder1.setMessage("Choices");
-//                builder1.setCancelable(false);
-
-//                builder1.setPositiveButton(
-//                        "Save",
-//                        (dialog, id) -> {
-//                            dialog.cancel();
-//                            String url = chatModel.getMessage();
-//                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-//                            request.allowScanningByMediaScanner();
-//                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-//                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, chatModel.getFilename());
-//                            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-//                            manager.enqueue(request);
-//                        });
 //
-//                builder1.setNegativeButton(
-//                        "Open",
-//                        (dialog, id) -> {
-////                            Intent intent = new Intent(context, LoadPdf.class);
-////                            intent.putExtra("pdf",chatModel.getMessage());
-////                            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, Uri.parse(chatModel.getMessage()));
-//                            String url = chatModel.getMessage();
-//                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-//                            request.allowScanningByMediaScanner();
-//                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-//                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, chatModel.getFilename());
-//                            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-//                            manager.enqueue(request);
-//
-//                            try {
-//                                manager.openDownloadedFile(0);
-//                            } catch (FileNotFoundException e) {
-//                                e.printStackTrace();
-//                            }
-//                            Intent intent = new Intent(Intent.ACTION_SEND);
-//                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-//                            intent.setType("application/pdf");
-//                            intent.putExtra(Intent.EXTRA_STREAM,chatModel.getMessage());
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            context.startActivity(Intent.createChooser(,"PDF"));
-
-//                            intent.addCategory(Intent.DO);
-
-            // Optionally, specify a URI for the file that should appear in the
-            // system file picker when it loads.
-//                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, chatModel.getMessage());
-//
-//                            context.startActivity(intent);
-//                            dialog.cancel();
-//                AlertDialog alert11 = builder1.create();
-//                alert11.show();
-
-//                ProgressDialog dialog;
-//                dialog = new ProgressDialog(context);
-//                dialog.setTitle("Downloading ... ");
-
-//                dialog.setMessage(""+reference);
-//            });
         }
         else if (holder.getClass() == ReceiverPDFViewHolder.class) {
             if (chatModel.getFilename().endsWith(".pdf")){
@@ -265,8 +219,51 @@ public class ChatAdapters extends  RecyclerView.Adapter{
 
             });
         }
-        else if (holder.getClass()==ReceiverCONTACTViewHolder.class)
-        {
+        else if (holder.getClass()==SANDERCONTACTViewHolder.class){
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+            ((SANDERCONTACTViewHolder)holder).CBinding.time.setText(time);
+            ((SANDERCONTACTViewHolder)holder).CBinding.filename.setText(chatModel.getMessage());
+            ((SANDERCONTACTViewHolder)holder).CBinding.number.setText(chatModel.getFilename());
+            ((SANDERCONTACTViewHolder)holder).CBinding.getRoot().setOnLongClickListener(v -> {
+                PopupMenu popup = new PopupMenu(context,  ((SANDERCONTACTViewHolder)holder).CBinding.main);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.contactmenu, popup.getMenu());
+                popup.setOnMenuItemClickListener(item -> {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip;
+                    switch (item.getItemId()) {
+                        case R.id.NameCopy:
+                            clip = ClipData.newPlainText("Name", chatModel.getMessage());
+                            clipboard.setPrimaryClip(clip);
+                            return true;
+                        case R.id.NumberCopy:
+                            clip = ClipData.newPlainText("number", chatModel.getFilename());
+                            clipboard.setPrimaryClip(clip);
+                            return false;
+                        case R.id.findName:
+                            findingUser(chatModel.getMessage(), holder,position,"name");
+                            return false;
+                        case R.id.findNumber:
+                            findingUser(chatModel.getFilename(), holder,position,"number");
+                            return false;
+
+
+
+
+////            case R.id.delete:
+////                delete(item);
+//                return true;
+                        default:
+                            return false;
+                    }
+                });
+                popup.show();
+                return false;
+            });
+        }
+        else if (holder.getClass()==ReceiverCONTACTViewHolder.class) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
             Date date = new Date(chatModel.getSandTime());
             String time = simpleDateFormat.format(date);
@@ -275,20 +272,26 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             ((ReceiverCONTACTViewHolder)holder).ContactBinding.number.setText(chatModel.getFilename());
             ((ReceiverCONTACTViewHolder)holder).ContactBinding.main.setOnClickListener(view->{
                 PopupMenu popup = new PopupMenu(context,  ((ReceiverCONTACTViewHolder)holder).ContactBinding.main);
-
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.contactmenu, popup.getMenu());
                 popup.setOnMenuItemClickListener(item -> {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip;
                     switch (item.getItemId()) {
-                        case R.id.findName:
-                            findingUser(chatModel.getMessage(), ((ReceiverCONTACTViewHolder)holder),position);
-                            Toast.makeText(context, "find", Toast.LENGTH_SHORT).show();
+                        case R.id.NameCopy:
+                            clip = ClipData.newPlainText("Name", chatModel.getMessage());
+                            clipboard.setPrimaryClip(clip);
                             return true;
-
-
-
-
-
+                        case R.id.NumberCopy:
+                            clip = ClipData.newPlainText("number", chatModel.getFilename());
+                            clipboard.setPrimaryClip(clip);
+                            return false;
+                        case R.id.findName:
+                            findingUser(chatModel.getMessage(), holder,position,"name");
+                            return true;
+                        case R.id.findNumber:
+                            findingUser(chatModel.getFilename(), holder,position,"number");
+                            return true;
 ////            case R.id.delete:
 ////                delete(item);
 //                return true;
@@ -318,10 +321,7 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                 context.startActivity(phone_intent);
             });
         }
-
-
-        else if (holder.getClass()==ImageSanderViewHolder.class)
-        {
+        else if (holder.getClass()==ImageSanderViewHolder.class) {
             Glide.with(context).load(chatModel.getMessage()).into(((ImageSanderViewHolder)holder).SendBinding.SanderImageview);
             ((ImageSanderViewHolder) holder).SendBinding.SanderImageview.setOnClickListener(view -> {
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chatModel.getMessage())));
@@ -329,8 +329,7 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             });
 
         }
-        else if (holder.getClass()==ImageGroupReceiverViewHolder.class)
-        {
+        else if (holder.getClass()==ImageGroupReceiverViewHolder.class) {
             ((ImageGroupReceiverViewHolder) holder).GroupBinding.SanderName.setText(chatModel.getSanderName());
             Glide.with(context).load(chatModel.getMessage()).into(((ImageGroupReceiverViewHolder)holder).GroupBinding.RImageview);
             ((ImageGroupReceiverViewHolder) holder).GroupBinding.RImageview.setOnClickListener(view -> {
@@ -338,21 +337,17 @@ public class ChatAdapters extends  RecyclerView.Adapter{
 
             });
         }
-
-        else if (holder.getClass()==ImageReceiverViewHolder.class)
-        {
+        else if (holder.getClass()==ImageReceiverViewHolder.class) {
             Glide.with(context).load(chatModel.getMessage()).into(((ImageReceiverViewHolder)holder).Binding.Imageview);
             ((ImageReceiverViewHolder) holder).Binding.Imageview.setOnClickListener(view -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chatModel.getMessage()))));
 
 
         }
-        else if (holder.getClass()==GroupReceiverViewHolder.class)
-        {
+        else if (holder.getClass()==GroupReceiverViewHolder.class) {
             ((GroupReceiverViewHolder)holder).GroupBinding.SanderName.setText(chatModel.getSanderName());
             ((GroupReceiverViewHolder)holder).GroupBinding.mas.setText(chatModel.getMessage());
         }
-        else {
-
+        else if (holder.getClass()==ReceiverViewHolder.class){
             ((ReceiverViewHolder)holder).binding.messageText.setText(chatModel.getMessage());
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
             Date date = new Date(chatModel.getSandTime());
@@ -360,20 +355,31 @@ public class ChatAdapters extends  RecyclerView.Adapter{
 
             ((ReceiverViewHolder)holder).binding.messageTime.setText(time);
         }
-
     }
-
-    private void findingUser(String name, ReceiverCONTACTViewHolder view, int position) {
+    @Override
+    public int getItemCount() {
+        return ChatModels.size();
+    }
+//    Find of Out side function
+    private void findingUser(String name,  RecyclerView.ViewHolder view, int position,String FindBy) {
+        Dialog findUser = new Dialog(context);
+        findUser.setContentView(R.layout.findinguserlayout);
+        findUser.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        findUser.setCanceledOnTouchOutside(true);
+        findUser.onBackPressed();
+        findUser.show();
+        RecyclerView recyclerViewUsers = findUser.findViewById(R.id.users);
+        TextView textView = findUser.findViewById(R.id.not_Found);
         FirebaseDatabase users;
         FirebaseAuth auth;
         UserInfoAdapters userInfoAdapters;
         auth = FirebaseAuth.getInstance();
         users = FirebaseDatabase.getInstance();
         ArrayList<UserInfo> userInfoS = new ArrayList<>();
-        userInfoAdapters = new UserInfoAdapters(userInfoS, this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        binding.recyclerView.setLayoutManager(layoutManager);
-        binding.recyclerView.setAdapter(userInfoAdapters);
+        userInfoAdapters = new UserInfoAdapters(userInfoS, context);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerViewUsers.setLayoutManager(layoutManager);
+        recyclerViewUsers.setAdapter(userInfoAdapters);
         users.getReference().child("UserInfo").addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -383,9 +389,33 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                     UserInfo userInfo = snapshot1.getValue(UserInfo.class);
                     if (!Objects.equals(snapshot1.getKey(), auth.getUid())) {
                         assert userInfo != null;
-                        userInfo.setUserid(snapshot1.getKey());
-                        userInfoS.add(userInfo);
+                        if (FindBy.trim().equals("name")){
+                            if (userInfo.getName().equals(name)){
+                                textView.setVisibility(View.INVISIBLE);
+                                recyclerViewUsers.setVisibility(View.VISIBLE);
+                                userInfoS.add(userInfo);
+                            }else {
+                                textView.setVisibility(View.VISIBLE);
+                                recyclerViewUsers.setVisibility(View.INVISIBLE);
+                                textView.setText("We are Not Found amy User of Nmae "+ name);
 
+                            }
+                        }
+                        else if (FindBy.trim().equals("number")){
+                            Toast.makeText(context, "Now"+userInfo.getNumber(), Toast.LENGTH_SHORT).show();
+                            if (userInfo.getNumber().equals(name)) {
+                                Toast.makeText(context, userInfo.getNumber(), Toast.LENGTH_SHORT).show();
+                                textView.setVisibility(View.INVISIBLE);
+                                recyclerViewUsers.setVisibility(View.VISIBLE);
+                                userInfoS.add(userInfo);
+                            }
+                            else {
+                                textView.setVisibility(View.VISIBLE);
+                                textView.setText("We are Not Found amy User of Number "+ name);
+                                recyclerViewUsers.setVisibility(View.INVISIBLE);
+                            }
+
+                        }
                     }
                     userInfoAdapters.notifyDataSetChanged();
 
@@ -398,12 +428,9 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             }
         });
     }
+//    Ending
 
-    @Override
-    public int getItemCount() {
-        return ChatModels.size();
-    }
-
+//    Starting Holder Class hear
     public static class SanderViewHolder extends RecyclerView.ViewHolder {
         SenderBinding SendBinding;
         public SanderViewHolder(@NonNull View itemView) {
@@ -448,13 +475,20 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                 GroupBinding = GroupimagereceiverBinding.bind(itemView);
             }
     }
-
     public static class SanderPDFViewHolder extends RecyclerView.ViewHolder {
         SanderPdfBinding pdfBinding;
 
         public SanderPDFViewHolder(@NonNull View itemView) {
             super(itemView);
             pdfBinding = SanderPdfBinding.bind(itemView);
+        }
+    }
+    public static class SANDERCONTACTViewHolder extends RecyclerView.ViewHolder {
+        SnadercontactlayoutBinding CBinding;
+
+        public SANDERCONTACTViewHolder(@NonNull View itemView) {
+            super(itemView);
+            CBinding = SnadercontactlayoutBinding.bind(itemView);
         }
     }
     public static class ReceiverPDFViewHolder extends RecyclerView.ViewHolder {
@@ -473,4 +507,5 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             ContactBinding = ReceivercontactBinding.bind(itemView);
         }
     }
+//    Ending
 }
