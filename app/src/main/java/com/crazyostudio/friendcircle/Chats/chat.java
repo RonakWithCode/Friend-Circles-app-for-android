@@ -156,7 +156,7 @@ public class chat extends AppCompatActivity {
                         .crop()
                         .compress(1024)
                         .maxResultSize(800, 800)
-                        .start(1);
+                        .start(CameraCode);
 //                Intent intent = new Intent();
 //                intent.setAction(Intent.ACTION_GET_CONTENT);
 //                intent.setType("image/*");
@@ -167,11 +167,11 @@ public class chat extends AppCompatActivity {
                 browseDocuments();
             });
             sandingoptionsBinding.contact.setOnClickListener(view3 -> {
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, ContactsContract.Contacts.CONTENT_URI);
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, ContactsContract.Contacts.CONTENT_URI);
+//                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
 //                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-//                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
                 startActivityForResult(intent, ContactCode);
             });
         });
@@ -200,7 +200,7 @@ public class chat extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
-        if (data.getData() != null && requestCode == 1) {
+        if (data.getData() != null && requestCode == CameraCode) {
             final Uri dataUri = data.getData();
 //            binding.userImage.setImageURI(dataUri);
             long Time = System.currentTimeMillis();

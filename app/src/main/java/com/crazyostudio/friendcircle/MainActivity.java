@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CALL_PHONE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+//            Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
     private static final String[] PERMISSIONS_10_AND_ABOVE = {
@@ -82,20 +82,20 @@ public class MainActivity extends AppCompatActivity {
         // Permissions are already granted, proceed with your logic
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-
-                try {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
-                    startActivity(intent);
-                } catch (Exception ex) {
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                    startActivity(intent);
-                }
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            if (!Environment.isExternalStorageManager()) {
+//
+//                try {
+//                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+//                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
+//                    startActivity(intent);
+//                } catch (Exception ex) {
+//                    Intent intent = new Intent();
+//                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                    startActivity(intent);
+//                }
+//            }
+//        }
     }
 
     private boolean arePermissionsGranted(String[] permissions) {

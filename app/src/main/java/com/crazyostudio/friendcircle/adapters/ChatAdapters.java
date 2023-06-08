@@ -24,8 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.crazyostudio.friendcircle.R;
-import com.crazyostudio.friendcircle.databinding.GroupchatreceiverBinding;
-import com.crazyostudio.friendcircle.databinding.GroupimagereceiverBinding;
 import com.crazyostudio.friendcircle.databinding.ReceiverBinding;
 import com.crazyostudio.friendcircle.databinding.ReceiverImageBinding;
 import com.crazyostudio.friendcircle.databinding.ReceivercontactBinding;
@@ -55,9 +53,8 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             ,SANDER_PDF_VIEW_TYPE=3
             ,SANDER_CONTACT_VIEW_TYPE=4;
 
-    int GROUP_IMAGE_RECEIVER_VIEW_TYPE=101
-            ,GROUP_RECEIVER_VIEW_TYPE =102
-            ,RECEIVER_VIEW_TYPE=103
+    int
+            RECEIVER_VIEW_TYPE=103
             ,IMAGE_RECEIVER_VIEW_TYPE=104
             ,RECEIVER_PDF_VIEW_TYPE=105
             ,RECEIVER_CONTACT_VIEW_TYPE=106;
@@ -99,14 +96,13 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             View view = LayoutInflater.from(context).inflate(R.layout.receiver_image,parent,false);
             return new ImageReceiverViewHolder(view);
         }
-        else if (viewType==GROUP_IMAGE_RECEIVER_VIEW_TYPE)
-        {
-            View view = LayoutInflater.from(context).inflate(R.layout.groupimagereceiver,parent,false);
-            return new ImageGroupReceiverViewHolder(view);
-        }
-        else {
+
+        else if (viewType==RECEIVER_VIEW_TYPE){
             View view = LayoutInflater.from(context).inflate(R.layout.receiver,parent,false);
             return new ReceiverViewHolder(view);
+        }
+        else {
+            return null;
         }
     }
     @Override
@@ -117,31 +113,27 @@ public class ChatAdapters extends  RecyclerView.Adapter{
                 return IMAGE_SANDER_VIEW_TYPE;
             } else if (ChatModels.get(position).isPDF()) {
                 return SANDER_PDF_VIEW_TYPE;
-            }
-            else if (ChatModels.get(position).isContact()) {
+            } else if (ChatModels.get(position).isContact()) {
                 return SANDER_CONTACT_VIEW_TYPE;
-            }
-
-            else {
+            } else {
                 return SANDER_VIEW_TYPE;
             }
-        }
-//  Receiver
-        else {
-            if (ChatModels.get(position).isGroup()) {
-                if (ChatModels.get(position).isImage()) {
-                    return GROUP_IMAGE_RECEIVER_VIEW_TYPE;
-                }else {
-                    return GROUP_RECEIVER_VIEW_TYPE;
-                }
-            } else if (ChatModels.get(position).isPDF()) {
+        } else {
+            if (ChatModels.get(position).isImage()) {
+                return IMAGE_RECEIVER_VIEW_TYPE;
+            }
+            else if (ChatModels.get(position).isPDF()) {
                 return RECEIVER_PDF_VIEW_TYPE;
-            } else if (ChatModels.get(position).isContact()) {
+            }
+            else if (ChatModels.get(position).isContact()) {
                 return RECEIVER_CONTACT_VIEW_TYPE;
-            } else {
+            }
+            else {
                 return RECEIVER_VIEW_TYPE;
             }
         }
+
+//        return
     }
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
@@ -170,11 +162,11 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
             Date date = new Date(chatModel.getSandTime());
             String time = simpleDateFormat.format(date);
+            ((SanderPDFViewHolder)holder).pdfBinding.time.setText(time);
 
             ((SanderPDFViewHolder)holder).pdfBinding.filename.setText(chatModel.getFilename());
             ((SanderPDFViewHolder)holder).pdfBinding.size.setText(chatModel.getFileSize());
 //            ((SanderPDFViewHolder)holder).pdfBinding.pages.setText(chatModel.getFilePage());
-            ((SanderPDFViewHolder)holder).pdfBinding.time.setText(time);
             ((SanderPDFViewHolder)holder).pdfBinding.Download.setOnClickListener(view->
             {
                 String url = chatModel.getMessage();
@@ -322,6 +314,11 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             });
         }
         else if (holder.getClass()==ImageSanderViewHolder.class) {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+            ((ImageSanderViewHolder)holder).SendBinding.time.setText(time);
+
             Glide.with(context).load(chatModel.getMessage()).into(((ImageSanderViewHolder)holder).SendBinding.SanderImageview);
             ((ImageSanderViewHolder) holder).SendBinding.SanderImageview.setOnClickListener(view -> {
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chatModel.getMessage())));
@@ -329,23 +326,16 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             });
 
         }
-        else if (holder.getClass()==ImageGroupReceiverViewHolder.class) {
-            ((ImageGroupReceiverViewHolder) holder).GroupBinding.SanderName.setText(chatModel.getSanderName());
-            Glide.with(context).load(chatModel.getMessage()).into(((ImageGroupReceiverViewHolder)holder).GroupBinding.RImageview);
-            ((ImageGroupReceiverViewHolder) holder).GroupBinding.RImageview.setOnClickListener(view -> {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chatModel.getMessage())));
-
-            });
-        }
         else if (holder.getClass()==ImageReceiverViewHolder.class) {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            Date date = new Date(chatModel.getSandTime());
+            String time = simpleDateFormat.format(date);
+            ((ImageReceiverViewHolder)holder).Binding.time.setText(time);
+
             Glide.with(context).load(chatModel.getMessage()).into(((ImageReceiverViewHolder)holder).Binding.Imageview);
             ((ImageReceiverViewHolder) holder).Binding.Imageview.setOnClickListener(view -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chatModel.getMessage()))));
 
 
-        }
-        else if (holder.getClass()==GroupReceiverViewHolder.class) {
-            ((GroupReceiverViewHolder)holder).GroupBinding.SanderName.setText(chatModel.getSanderName());
-            ((GroupReceiverViewHolder)holder).GroupBinding.mas.setText(chatModel.getMessage());
         }
         else if (holder.getClass()==ReceiverViewHolder.class){
             ((ReceiverViewHolder)holder).binding.messageText.setText(chatModel.getMessage());
@@ -458,22 +448,6 @@ public class ChatAdapters extends  RecyclerView.Adapter{
             super(itemView);
             Binding = ReceiverImageBinding.bind(itemView);
         }
-    }
-    public static class GroupReceiverViewHolder extends RecyclerView.ViewHolder {
-        GroupchatreceiverBinding GroupBinding;
-
-        public GroupReceiverViewHolder(@NonNull View itemView) {
-            super(itemView);
-            GroupBinding = GroupchatreceiverBinding.bind(itemView);
-        }
-    }
-    public static class ImageGroupReceiverViewHolder extends RecyclerView.ViewHolder {
-            GroupimagereceiverBinding GroupBinding;
-
-            public ImageGroupReceiverViewHolder(@NonNull View itemView) {
-                super(itemView);
-                GroupBinding = GroupimagereceiverBinding.bind(itemView);
-            }
     }
     public static class SanderPDFViewHolder extends RecyclerView.ViewHolder {
         SanderPdfBinding pdfBinding;

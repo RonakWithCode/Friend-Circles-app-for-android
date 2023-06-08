@@ -2,13 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="10dp"
-    android:maxWidth="260dp"
-    android:minWidth="200dp"
     android:background="@color/white"
-    android:minHeight="200dp"
-    android:maxHeight="260dp"
+    android:layout_marginTop="10dp"
     android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="5dp"
     android:layout_height="wrap_content">
 
     <com.ortiz.touchview.TouchImageView
@@ -19,9 +17,19 @@
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
         android:contentDescription="@string/todo"
-        android:minWidth="200dp"
-        android:minHeight="200dp"
-        android:scaleType="center"
+        android:scaleType="fitXY"
+        android:maxHeight="250dp"
+        android:maxWidth="250dp"
         android:adjustViewBounds="true"
         tools:src="@tools:sample/avatars" />
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:text="12:12:12 PM"
+        android:layout_gravity="end"
+        android:textColor="#808080"
+        android:layout_below="@id/Imageview"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="5dp"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

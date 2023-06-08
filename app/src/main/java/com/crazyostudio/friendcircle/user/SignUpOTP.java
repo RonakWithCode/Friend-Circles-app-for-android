@@ -33,16 +33,17 @@ public class SignUpOTP extends AppCompatActivity {
     ActivitySignUpOtpBinding binding;
     ProgressDialog dialog;
     String Number,verificationId;
-    FirebaseAuth auth;
+    FirebaseAuth firebaseAuth;
+
     private EditText mEt1, mEt2, mEt3, mEt4, mEt5, mEt6;
     private Context mContext;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        auth =FirebaseAuth.getInstance();
         binding = ActivitySignUpOtpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        firebaseAuth =  FirebaseAuth.getInstance();
         dialog = new ProgressDialog(this);
         Number = getIntent().getStringExtra("number");
         binding.fullNumber.setText("+91"+Number+" ");
@@ -131,7 +132,7 @@ public class SignUpOTP extends AppCompatActivity {
     }
     private void sentOTP(){
         PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(auth)
+                PhoneAuthOptions.newBuilder(firebaseAuth)
                         .setPhoneNumber("+91"+Number)
                         .setTimeout(60L, TimeUnit.SECONDS)
                         .setActivity(SignUpOTP.this)
@@ -187,31 +188,32 @@ public class SignUpOTP extends AppCompatActivity {
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         dialog.setTitle("Waiting We are try to Login ");
         dialog.show();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(SignUpOTP.this, task -> {
                     if (task.isSuccessful()) {
-
                         // Sign in success, update UI with the signed-in user's information
-                        if(Objects.requireNonNull(Objects.requireNonNull(auth.getCurrentUser()).getDisplayName()).isEmpty())
-                        {
+//                        if(firebaseAuth.getCurrentUser().getDisplayName().isEmpty())
+//                        {
                             if (dialog.isShowing()) {
                                 dialog.dismiss();
                             }
                             Intent intent = new Intent(SignUpOTP.this, SignupDetails.class);
+//                        Log.i("TAG", "signInWithPhoneAuthCredential: "+Number);
+                        Toast.makeText(mContext, Number, Toast.LENGTH_SHORT).show();
                             intent.putExtra("Number",Number);
                             startActivity(intent);
-                        }else {
-                            if (dialog.isShowing()) {
-                                dialog.dismiss();
-                            }
-                            Intent intent = new Intent(SignUpOTP.this, LockMangerActivity.class);
-                            startActivity(intent);
                         }
+//                        }else {
+//                            if (dialog.isShowing()) {
+//                                dialog.dismiss();
+//                            }
+//                            Intent intent = new Intent(SignUpOTP.this, LockMangerActivity.class);
+//                            startActivity(intent);
+//                        }
 
                         //                        getActivity().finish();
 
-                    }else {
+                    else {
                         if (dialog.isShowing()) {
                             dialog.dismiss();
                         }
