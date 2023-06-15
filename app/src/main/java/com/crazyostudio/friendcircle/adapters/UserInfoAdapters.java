@@ -53,9 +53,18 @@ public class UserInfoAdapters extends RecyclerView.Adapter<UserInfoAdapters.User
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChildren()){
                     for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                        holder.binding.lastMessage.setText(Objects.requireNonNull(snapshot1.child("message").getValue()).toString());
+                        if (snapshot1.child("image").getValue().equals("false")){
+                            holder.binding.lastMessage.setText("Photo");
+
+                        }
+                        else if (snapshot1.child("pdf").getValue().equals("true")) {
+                            holder.binding.lastMessage.setText("PDF");
+                        }
+                        else {
+                            holder.binding.lastMessage.setText(Objects.requireNonNull(snapshot1.child("message").getValue()).toString());
+                        }
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
-                        long sysTime = Long.parseLong(snapshot1.child("sandTime").getValue().toString());
+                        long sysTime = Long.parseLong(Objects.requireNonNull(snapshot1.child("sandTime").getValue()).toString());
                         Date date = new Date(sysTime);
                         String time = simpleDateFormat.format(date);
 
