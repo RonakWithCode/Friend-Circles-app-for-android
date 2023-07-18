@@ -34,7 +34,6 @@ public class SignUpOTP extends AppCompatActivity {
     ProgressDialog dialog;
     String Number,verificationId;
     FirebaseAuth firebaseAuth;
-
     private EditText mEt1, mEt2, mEt3, mEt4, mEt5, mEt6;
     private Context mContext;
     @SuppressLint("SetTextI18n")
@@ -222,5 +221,4 @@ public class SignUpOTP extends AppCompatActivity {
 
 
     }
-
 }
