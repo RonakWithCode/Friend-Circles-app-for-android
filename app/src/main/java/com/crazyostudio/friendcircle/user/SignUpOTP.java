@@ -143,7 +143,7 @@ public class SignUpOTP extends AppCompatActivity {
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-//            signInWithPhoneAuthCredential(credential);
+            signInWithPhoneAuthCredential(credential);
 //            final String code = credential.getSmsCode();
 //            if (code!=null)
 //            {
@@ -186,32 +186,29 @@ public class SignUpOTP extends AppCompatActivity {
         }
     }
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        dialog.setTitle("Waiting We are try to Login ");
+        dialog.setTitle("Waiting We are Try to Login ");
         dialog.show();
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(SignUpOTP.this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-//                        if(firebaseAuth.getCurrentUser().getDisplayName().isEmpty())
-//                        {
-                            if (dialog.isShowing()) {
-                                dialog.dismiss();
-                            }
-                            Intent intent = new Intent(SignUpOTP.this, SignupDetails.class);
-//                        Log.i("TAG", "signInWithPhoneAuthCredential: "+Number);
-                        Toast.makeText(mContext, Number, Toast.LENGTH_SHORT).show();
-                            intent.putExtra("Number",Number);
+                       if(firebaseAuth.getCurrentUser() !=null) {
+                           dialog.setTitle("User is Successful Sign In we are check some information");
+                           if (dialog.isShowing()) {dialog.dismiss();}
+                           if (firebaseAuth.getCurrentUser().getDisplayName() == null) {
+                               Intent intent = new Intent(SignUpOTP.this, SignupDetails.class);
+                               intent.putExtra("Number", Number);
+                               startActivity(intent);
+                           }
+                           else {
+                               if (dialog.isShowing()) {
+                                   dialog.dismiss();
+                               }
+                            Intent intent = new Intent(SignUpOTP.this, LockMangerActivity.class);
                             startActivity(intent);
-                        }
-//                        }else {
-//                            if (dialog.isShowing()) {
-//                                dialog.dismiss();
-//                            }
-//                            Intent intent = new Intent(SignUpOTP.this, LockMangerActivity.class);
-//                            startActivity(intent);
-//                        }
-
-                        //                        getActivity().finish();
+                           }
+                       }
+                    }
 
                     else {
                         if (dialog.isShowing()) {

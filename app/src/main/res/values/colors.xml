@@ -41,5 +41,18 @@
     <color name="trueBlack">#000000</color>
     <color name="otp_editext_color">#DAE2DFDF</color>
 
+    <!--Main Background Color -->
 
+    <color name="MainBackgroundColor">#ffff</color>
+    <color name="MainTextColor">#000000</color>
+
+    <!-- AboutActivity Colors    -->
+    <color name="AboutBackgroundtColor">#000000</color>
+
+    <!--    <color name="StoryTextColor">#000000</color>-->
+
+
+
+    <!--Color of StoryTextColors  -->
+    <color name="StoryTextColor">#000000</color>
 </resources>
