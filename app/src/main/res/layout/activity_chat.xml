@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/MainBackgroundColor"
     android:layout_height="match_parent"
     tools:context=".Chats.chat">
 
@@ -22,7 +23,7 @@
             android:id="@+id/BackBts"
             android:layout_width="20dp"
             android:layout_height="32dp"
-            android:scaleType="center"
+            android:scaleType="fitXY"
             android:src="@drawable/img"
             app:riv_oval="true" />
 
@@ -47,7 +48,7 @@
             android:layout_marginTop="6dp"
             android:maxLength="24"
             android:text="Ronak jain"
-            android:textColor="@color/white"
+            android:textColor="@color/BlackMainTextColor"
             android:textSize="19sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
@@ -108,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/green"
             android:layout_marginEnd="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

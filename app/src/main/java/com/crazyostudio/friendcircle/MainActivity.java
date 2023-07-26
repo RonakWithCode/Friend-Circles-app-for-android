@@ -3,8 +3,11 @@ package com.crazyostudio.friendcircle;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,10 +18,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.crazyostudio.friendcircle.adapters.ViewPagerAdapter;
+import com.crazyostudio.friendcircle.databinding.ActivityFragmentLoadBinding;
 import com.crazyostudio.friendcircle.databinding.ActivityMainBinding;
 import com.crazyostudio.friendcircle.fragment.ShareFileFragment;
 import com.crazyostudio.friendcircle.fragment.StoryFragment;
 import com.crazyostudio.friendcircle.fragment.UserInfoFragment;
+import com.crazyostudio.friendcircle.model.CurrentInternetConnection;
 import com.crazyostudio.friendcircle.user.AboutActivity;
 import com.crazyostudio.friendcircle.user.SignUp;
 import com.crazyostudio.friendcircle.user.User_Profile;
@@ -30,14 +35,14 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     private static final String[] PERMISSIONS_BELOW_10 = {
-            Manifest.permission.CAMERA,
             Manifest.permission.READ_CONTACTS,
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CALL_PHONE,
 //            Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
     private static final String[] PERMISSIONS_10_AND_ABOVE = {
-            Manifest.permission.CAMERA,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CALL_PHONE
     };
@@ -70,10 +75,9 @@ public class MainActivity extends AppCompatActivity {
     private void requestPermissions(String[] permissions) {
         if (!arePermissionsGranted(permissions)) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
-            }
+        }
+
         // Permissions are already granted, proceed with your logic
-
-
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //            if (!Environment.isExternalStorageManager()) {
 //

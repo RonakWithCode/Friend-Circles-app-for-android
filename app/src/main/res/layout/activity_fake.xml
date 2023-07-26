@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/MainBackgroundColor"
     tools:context=".user.FakeActivity">
     <TextView
-        android:textColor="@color/black"
+        android:textColor="@color/MainTextColor"
         android:layout_centerInParent="true"
-        android:textSize="34sp"
+        android:textSize="@dimen/_24ssp"
         android:textAlignment="center"
         android:text="Sorry we are now Offline"
         android:layout_width="wrap_content"

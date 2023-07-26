@@ -1,6 +1,7 @@
 package com.crazyostudio.friendcircle.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.crazyostudio.friendcircle.adapters.UserInfoAdapters;
+import com.crazyostudio.friendcircle.databinding.ActivityFragmentLoadBinding;
 import com.crazyostudio.friendcircle.databinding.FragmentUserInfoBinding;
+import com.crazyostudio.friendcircle.model.CurrentInternetConnection;
 import com.crazyostudio.friendcircle.model.UserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +39,11 @@ public class UserInfoFragment extends Fragment {
         binding = FragmentUserInfoBinding.inflate(inflater,container,false);
         auth = FirebaseAuth.getInstance();
         users = FirebaseDatabase.getInstance();
+//        if (CurrentInternetConnection.getInternetConnectionType(getContext())){
+//            Intent intent = new Intent(getContext(), ActivityFragmentLoadBinding.class);
+//            intent.putExtra("LoadID","network");
+//            startActivity(intent);
+//        }
         getUser();
         return binding.getRoot();
     }

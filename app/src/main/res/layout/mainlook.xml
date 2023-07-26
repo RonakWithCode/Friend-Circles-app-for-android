@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/list_chat_layout_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="8dp">
 
@@ -20,8 +21,10 @@
         android:src="@drawable/userimage"/>
     <TextView
         android:id="@+id/username"
-        android:textColor="@color/black"
+        android:maxLength="23"
+        android:textColor="@color/MainTextColor"
         android:layout_marginTop="5dp"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/userAvatar"
@@ -32,16 +35,16 @@
         android:id="@+id/lastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLength="80"
         android:layout_below="@id/username"
-
-        android:textColor="@color/black"
+        android:textColor="@color/MainTextColor"
         android:layout_toEndOf="@id/userAvatar"
         android:layout_marginStart="12dp"
         android:textSize="14sp" />
 
     <TextView
         android:id="@+id/lastTime"
-        android:textColor="@color/black"
+        android:textColor="@color/MainTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

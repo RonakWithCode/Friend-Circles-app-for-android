@@ -33,7 +33,6 @@
     <color name="orange">#FF5722</color>
     <color name="white_Look">#EBECEE</color>
     <color name="green">#005c4b</color>
-    <color name="Chat_Color_green">#d9fdd3</color>
 
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#D5A5A3A3</color>
@@ -45,14 +44,30 @@
 
     <color name="MainBackgroundColor">#ffff</color>
     <color name="MainTextColor">#000000</color>
+    <color name="BlackMainTextColor">#ffff</color>
 
     <!-- AboutActivity Colors    -->
     <color name="AboutBackgroundtColor">#000000</color>
 
     <!--    <color name="StoryTextColor">#000000</color>-->
 
+    <!--SeeUserProfile-->
+    <color name="SeeUserProfileMainBackground">#eaeaea</color>
+    <color name="SeeUserProfilesub_background">#ffff</color>
 
-
+<!-- Login    -->
+    <color name="PlanText">#CACACA</color>
     <!--Color of StoryTextColors  -->
     <color name="StoryTextColor">#000000</color>
+    <!--    SignupDetails -->
+    <color name="SignupDetailsBlackPlanText">#FFFFFF</color>
+    <!--    User_Profile -->
+    <color name="User_ProfileBackground">#eaeaea</color>
+    <!--User list of Chat Layout Color -->
+    <color name="list_chat_layout_background">#ffff</color>
+        <!--Fix Color  -->
+    <color name="FixColorBlack">#000000</color>
+    <color name="Chat_Color_green">#d9fdd3</color>
+    <color name="StoryChat_Color_green">#a4c1a4</color>
+
 </resources>

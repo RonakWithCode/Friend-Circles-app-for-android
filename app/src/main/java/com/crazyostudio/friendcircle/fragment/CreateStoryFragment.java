@@ -1,5 +1,6 @@
 package com.crazyostudio.friendcircle.fragment;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,30 +14,40 @@ import androidx.fragment.app.Fragment;
 
 import com.crazyostudio.friendcircle.R;
 import com.crazyostudio.friendcircle.databinding.FragmentCreateStoryBinding;
+import com.crazyostudio.friendcircle.model.StoryModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class CreateStoryFragment extends Fragment {
     FragmentCreateStoryBinding binding;
+    ProgressDialog dialog;
+    int color;
+    FirebaseDatabase db;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentCreateStoryBinding.inflate(inflater,container,false);
-//        binding.changeTextStyle.setOnClickListener(v->{
-//            if (binding.changeTextStyle.get().equals(R.drawable.text_nomal)){
-//                binding.changeTextStyle.setBackgroundResource(R.drawable.font_bold);
-//                binding.text.setTypeface(Typeface.DEFAULT_BOLD);
-//                Toast.makeText(getContext(), "Change it to DEFAULT_BOLD", Toast.LENGTH_SHORT).show();
+        db = FirebaseDatabase.getInstance();
 
-//            }
-//        });
+        dialog = new ProgressDialog(getContext());
+
         binding.changeColorButton.setOnClickListener(v -> {
             Random random = new Random();
-            int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+            color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
             binding.colorChangingImageView.changeBackgroundColor(color);
         });
-
+        binding.AddStory.setOnClickListener(view->{
+            dialog.setTitle("Adding Story");
+            dialog.show();
+            UploadStory();
+        });
         return binding.getRoot();
 //            <com.makeramen.roundedimageview.RoundedImageView
 //        android:id="@+id/changeTextStyle"
@@ -53,5 +64,18 @@ public class CreateStoryFragment extends Fragment {
 //        app:riv_border_color="#333333"
 //        app:riv_oval="true" />
 
+    }
+
+    private void UploadStory() {
+        String ColorCode = String.valueOf(color);
+        StoryModel model = new StoryModel(FirebaseAuth.getInstance().getUid(),Objects.requireNonNull(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhotoUrl()).toString(),Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName(),ColorCode,"color",binding.text.getText().toString(),System.currentTimeMillis());
+        db.getReference().child("Story").push().setValue(model).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "Story is Added ", Toast.LENGTH_SHORT).show();
+                requireActivity().finish();
+            }else {
+                Toast.makeText(getContext(), "Story is not Added pls try after same time ", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

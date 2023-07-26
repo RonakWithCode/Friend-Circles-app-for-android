@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/MainBackgroundColor"
     android:layout_height="match_parent"
     tools:context=".user.LockMangerActivity">
 
     <EditText
         android:id="@+id/pass"
         android:hint="@string/enter_login_pass"
+        android:textColor="@color/MainTextColor"
+        android:textColorHint="@color/MainTextColor"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="50dp"
@@ -23,6 +26,7 @@
         android:layout_width="wrap_content"
         android:visibility="invisible"
         android:layout_below="@id/pass"
+        android:backgroundTint="@color/green"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
