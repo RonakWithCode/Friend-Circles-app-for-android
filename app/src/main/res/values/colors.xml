@@ -65,8 +65,12 @@
     <color name="User_ProfileBackground">#eaeaea</color>
     <!--User list of Chat Layout Color -->
     <color name="list_chat_layout_background">#ffff</color>
-        <!--Fix Color  -->
+        <!--FixColor  -->
     <color name="FixColorBlack">#000000</color>
+    <color name="FixColorSaveTextColor">#94abdc</color>
+    <color name="FixColorCancelTextColor">#ccdcf6</color>
+
+    <!--    -->
     <color name="Chat_Color_green">#d9fdd3</color>
     <color name="StoryChat_Color_green">#a4c1a4</color>
 

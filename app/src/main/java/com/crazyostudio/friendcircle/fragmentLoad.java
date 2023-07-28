@@ -11,8 +11,11 @@ import android.widget.Toast;
 
 import com.crazyostudio.friendcircle.fragment.FullScreenFragment;
 import com.crazyostudio.friendcircle.fragment.SelfFullScreenFragment;
+import com.crazyostudio.friendcircle.fragment.ShareNotesFragment;
 import com.crazyostudio.friendcircle.fragment.StoryFragment;
 import com.crazyostudio.friendcircle.model.noNetworkFragment;
+
+import java.util.ArrayList;
 
 public class fragmentLoad extends AppCompatActivity {
     String id;
@@ -22,20 +25,12 @@ public class fragmentLoad extends AppCompatActivity {
         setContentView(R.layout.activity_fragment_load);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Toast.makeText(this, "ha", Toast.LENGTH_SHORT).show();
         if (!getIntent().getStringExtra("LoadID").isEmpty()) {
              id = getIntent().getStringExtra("LoadID");
         }else {
             finish();
         }
         Intent intent = getIntent();
-        String userName = intent.getStringExtra("userName");
-        String Type = intent.getStringExtra("Type");
-        String Id = intent.getStringExtra("Id");
-        String userDP = intent.getStringExtra("userDP");
-        String color = intent.getStringExtra("color");
-        String text = intent.getStringExtra("text");
-        String time = intent.getStringExtra("time");
         Bundle data = new Bundle();
 
         switch (id){
@@ -45,29 +40,37 @@ public class fragmentLoad extends AppCompatActivity {
                 fragmentTransaction.commit();
                 break;
             case "StoryLoaderAll":
-                data.putString("userName", userName);
-                data.putString("Type", Type);
-                data.putString("Id", Id);
-                data.putString("userDP", userDP);
-                data.putString("color", color);
-                data.putString("text", text);
-                data.putString("time", time);
+                data.putString("userName", intent.getStringExtra("userName"));
+                data.putString("Type", intent.getStringExtra("Type"));
+                data.putString("Id", intent.getStringExtra("Id"));
+                data.putString("userDP", intent.getStringExtra("userDP"));
+                data.putString("color", intent.getStringExtra("color"));
+                data.putString("text", intent.getStringExtra("text"));
+                data.putString("time",  intent.getStringExtra("time"));
                 Fragment f = new FullScreenFragment();
                 f.setArguments(data);
                 fragmentTransaction.replace(R.id.loader,f);
                 fragmentTransaction.commit();
                 break;
             case "StoryLoaderSelf":
-                data.putString("userName", userName);
-                data.putString("Type", Type);
-                data.putString("Id", Id);
-                data.putString("userDP", userDP);
-                data.putString("color", color);
-                data.putString("text", text);
-                data.putString("time", time);
+                data.putString("userName", intent.getStringExtra("userName"));
+                data.putString("Type", intent.getStringExtra("Type"));
+                data.putString("Id", intent.getStringExtra("Id"));
+                data.putString("userDP", intent.getStringExtra("userDP"));
+                data.putString("color", intent.getStringExtra("color"));
+                data.putString("text", intent.getStringExtra("text"));
+                data.putString("time",  intent.getStringExtra("time"));
                 Fragment fullScreenFragment = new SelfFullScreenFragment();
                 fullScreenFragment.setArguments(data);
                 fragmentTransaction.replace(R.id.loader,fullScreenFragment);
+                fragmentTransaction.commit();
+                break;
+            case "shareList":
+                ArrayList<String> Notes = intent.getStringArrayListExtra("Notes");
+                data.putStringArrayList("Notes", Notes);
+                Fragment NotesImage = new ShareNotesFragment();
+                NotesImage.setArguments(data);
+                fragmentTransaction.replace(R.id.loader,NotesImage);
                 fragmentTransaction.commit();
                 break;
         }

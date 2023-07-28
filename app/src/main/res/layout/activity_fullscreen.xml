@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/MainBackgroundColor"
-    tools:context=".fragment.ShareFileFragment">
+    tools:context=".fullscreen">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/subjects"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photo_view"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createSubject"
+    <TextView
+        android:id="@+id/close"
+        android:text="X"
+        android:textSize="@dimen/_35sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:textColor="@color/FixColorBlack"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Tap to create new Sub" />
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

@@ -70,5 +70,8 @@
     <string name="english">English</string>
     <string name="hindi">हिंदी</string>
     <string name="tap_to_replay">जवाब देने के लिए टैप करें</string>
+    <string name="enter_subject_name">विषय का नाम दर्ज करें</string>
+    <string name="tap_to_open_in_full_screen">पूर्ण स्क्रीन में खोलने के लिए टैप करें</string>
+    <string name="tap_to_copy_the_link">लिंक कॉपी करने के लिए टैप करें</string>
 
 </resources>
