@@ -20,8 +20,8 @@ public class SeeUserProfile extends AppCompatActivity {
         UserImage = getIntent().getStringExtra("Images");
         UserBio = getIntent().getStringExtra("Bio");
 
-        binding.UserName.setText(UserName);
         binding.bio.setText(UserBio);
+        binding.UserName.setText(UserName);
         Glide.with(this).load(UserImage).into(binding.userImage);
 
     }

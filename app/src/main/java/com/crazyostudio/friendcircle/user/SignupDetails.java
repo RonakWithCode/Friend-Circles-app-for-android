@@ -120,7 +120,7 @@ public class SignupDetails extends AppCompatActivity {
 
     private void UploadImage(Uri image) {
         StorageReference file = reference.child(System.currentTimeMillis()+"."+ filletExtension(image));
-        file.putFile(image).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri -> {
+            file.putFile(image).addOnSuccessListener(taskSnapshot -> file.getDownloadUrl().addOnSuccessListener(uri -> {
             com.crazyostudio.friendcircle.model.UserInfo userInfo;
             userInfo = new com.crazyostudio.friendcircle.model.UserInfo(binding.Name.getText().toString(),uri.toString(),binding.Mail.getText().toString(),number);
             db.getReference().child("UserInfo").child(Objects.requireNonNull(Auth.getUid())).setValue(userInfo).addOnCompleteListener(task -> {
