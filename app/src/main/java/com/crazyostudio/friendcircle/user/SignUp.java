@@ -11,7 +11,7 @@ import com.crazyostudio.friendcircle.databinding.ActivitySignUpBinding;
 import com.google.firebase.auth.FirebaseAuth;
 public class SignUp extends AppCompatActivity {
     private ActivitySignUpBinding binding;
-//
+// t
 //    Context context;
 //    Resources resources;
     @Override
